@@ -1,21 +1,23 @@
 package ru.bill.renote
 
-import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
+import io.reactivex.Completable
+import io.reactivex.Flowable
+import io.reactivex.Maybe
 
 @Dao
 interface NotesDao {
     @Query("SELECT * FROM notes")
-    fun all(): LiveData<List<Note>>
+    fun all(): Flowable<List<Note>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(note: Note)
+    fun save(note: Note): Completable
 
-    @Query("SELECT * FROM notes WHERE id=:id")
-    fun noteById(id: Long): LiveData<Note>
+    @Query("SELECT * FROM notes WHERE id=:id LIMIT 1")
+    fun noteById(id: Long): Maybe<Note>
 
     @Query("DELETE FROM notes WHERE id=:id")
     fun delete(id: Long)
