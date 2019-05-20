@@ -1,24 +1,17 @@
 package ru.bill.renote.model.entities
 
 import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Embedded
 import android.arch.persistence.room.Entity
-import android.arch.persistence.room.ForeignKey
-import android.arch.persistence.room.ForeignKey.CASCADE
 import android.arch.persistence.room.PrimaryKey
 
 @Entity(
-    tableName = "notes",
-    foreignKeys = [ForeignKey(
-        entity = Category::class,
-        parentColumns = ["id"],
-        childColumns = ["category_id"],
-        onDelete = CASCADE
-    )]
+    tableName = "notes"
 )
 data class Note(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Long,
+    val noteId: Long,
 
     @ColumnInfo(name = "title")
     val title: String,
@@ -26,8 +19,8 @@ data class Note(
     @ColumnInfo(name = "body")
     val body: String,
 
-    @ColumnInfo(name = "category_id")
-    val categoryId: Long,
+    @Embedded(prefix = "category_")
+    val category: Category,
 
     @ColumnInfo(name = "source_link")
     val sourceLink: String?

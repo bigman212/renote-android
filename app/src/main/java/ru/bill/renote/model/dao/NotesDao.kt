@@ -4,7 +4,6 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
-import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import ru.bill.renote.model.entities.Note
@@ -15,7 +14,7 @@ interface NotesDao {
     fun all(): Flowable<List<Note>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(note: Note): Completable
+    fun save(note: Note)
 
     @Query("SELECT * FROM notes WHERE id=:id LIMIT 1")
     fun noteById(id: Long): Maybe<Note>
