@@ -11,7 +11,7 @@ import ru.bill.renote.model.entities.Note
 @Dao
 interface NotesDao {
     @Query("SELECT * FROM notes")
-    fun all(): Flowable<List<Note>>
+    fun all(): Maybe<List<Note>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun save(note: Note)
