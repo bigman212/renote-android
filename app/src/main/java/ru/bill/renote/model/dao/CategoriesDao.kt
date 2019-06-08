@@ -4,14 +4,14 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
-import io.reactivex.Flowable
 import io.reactivex.Maybe
+import io.reactivex.Single
 import ru.bill.renote.model.entities.Category
 
 @Dao
 interface CategoriesDao {
     @Query("SELECT * FROM categories")
-    fun all(): Maybe<List<Category>>
+    fun all(): Single<List<Category>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun save(category: Category)
