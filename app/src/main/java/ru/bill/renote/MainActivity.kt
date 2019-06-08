@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
 
         val manager = supportFragmentManager
         val transaction = manager.beginTransaction()
-        transaction.add(frame_layout.id, NoteListFragment.newInstance("" , ""))
+        transaction.add(frame_layout.id, NoteListFragment.newInstance())
         transaction.commit()
     }
 
