@@ -18,7 +18,7 @@ object EntitiesUtil {
 
     fun createCategories(number: Int): List<Category>{
         val categories = arrayListOf<Category>()
-        (1 until number).forEach { i ->
+        (1..number).forEach { i ->
             categories.add(Category(i.toLong(), "cat name $i"))
         }
         return categories

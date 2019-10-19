@@ -1,18 +1,17 @@
 package ru.bill.renote.notes.list
 
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_note_list.*
 import ru.bill.renote.R
 
-class NoteListFragment : Fragment() {
+class NoteListFragment : androidx.fragment.app.Fragment() {
     private lateinit var viewModel: NotesViewModel
 
     companion object {
@@ -39,7 +38,11 @@ class NoteListFragment : Fragment() {
             }
         })
 
-        rv_categories.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+        rv_categories.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(
+            this.context,
+            androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL,
+            false
+        )
         rv_categories.adapter = CategoriesListRVAdapter(listOf("CATEGORIES", "SCIENSE", "ALL", "NOTHING", "EVERYTHING"))
     }
 
