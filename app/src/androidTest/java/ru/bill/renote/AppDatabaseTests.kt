@@ -1,20 +1,17 @@
 package ru.bill.renote
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.persistence.room.Room
-import android.support.test.InstrumentationRegistry
-import android.support.test.runner.AndroidJUnit4
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.room.Room
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.After
-
-import org.junit.Test
-import org.junit.runner.RunWith
-
 import org.junit.Before
 import org.junit.Rule
+import org.junit.Test
+import org.junit.runner.RunWith
 import ru.bill.renote.model.AppDatabase
 import ru.bill.renote.model.dao.CategoriesDao
 import ru.bill.renote.model.dao.NotesDao
-import java.lang.Exception
 
 
 /**
@@ -35,7 +32,10 @@ class AppDatabaseTests {
 
     @Before
     fun initDatabase() {
-        database = Room.inMemoryDatabaseBuilder(InstrumentationRegistry.getContext(), AppDatabase::class.java)
+        database = Room.inMemoryDatabaseBuilder(
+            InstrumentationRegistry.getInstrumentation().context,
+            AppDatabase::class.java
+        )
             .allowMainThreadQueries()
             .build()
         categoriesDao = database.categoriesDao()

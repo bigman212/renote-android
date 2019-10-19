@@ -1,9 +1,9 @@
 package ru.bill.renote.model.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import ru.bill.renote.model.entities.Note
@@ -11,7 +11,7 @@ import ru.bill.renote.model.entities.Note
 @Dao
 interface NotesDao {
     @Query("SELECT * FROM notes")
-    fun all(): Maybe<List<Note>>
+    fun all(): Flowable<List<Note>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun save(note: Note)
