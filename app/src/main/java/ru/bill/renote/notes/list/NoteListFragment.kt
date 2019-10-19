@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,13 +32,15 @@ class NoteListFragment : Fragment() {
         viewModel.allNotes().observe(this, Observer { resource ->
             resource?.let { result ->
                 when {
-                    result.isLoading() -> tv_all.text = "LIOADING"
-                    result.isError() -> tv_all.text = "ERROR"
-                    result.isSuccessful() -> tv_all.text = result.data!!.toString()
+//                    result.isLoading() -> tv_all.text = "LIOADING"
+//                    result.isError() -> tv_all.text = "ERROR"
+//                    result.isSuccessful() -> tv_all.text = result.data!!.toString()
                 }
             }
-
         })
+
+        rv_categories.layoutManager = LinearLayoutManager(this.context, LinearLayoutManager.HORIZONTAL, false)
+        rv_categories.adapter = CategoriesListRVAdapter(listOf("CATEGORIES", "SCIENSE", "ALL", "NOTHING", "EVERYTHING"))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
