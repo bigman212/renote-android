@@ -13,28 +13,28 @@ private const val DB_NAME = "notes.db"
 
 @Database(entities = [Note::class, Category::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
-    abstract fun notesDao(): NotesDao
-    abstract fun categoriesDao(): CategoriesDao
+  abstract fun notesDao(): NotesDao
+  abstract fun categoriesDao(): CategoriesDao
 
-    companion object {
-        @Volatile
-        private var mInstance: AppDatabase? = null
+  companion object {
+    @Volatile
+    private var mInstance: AppDatabase? = null
 
-        fun instance(context: Context): AppDatabase {
-            return mInstance ?: synchronized(this) {
-                buildDatabase(context)
-                    .also { mInstance = it }
-            }
-        }
-
-        private fun buildDatabase(context: Context) =
-            Room.databaseBuilder(
-                context.applicationContext, AppDatabase::class.java,
-                DB_NAME
-            )
-                .fallbackToDestructiveMigration()
-                .build()
+    fun instance(context: Context): AppDatabase {
+      return mInstance ?: synchronized(this) {
+        buildDatabase(context)
+          .also { mInstance = it }
+      }
     }
+
+    private fun buildDatabase(context: Context) =
+      Room.databaseBuilder(
+        context.applicationContext, AppDatabase::class.java,
+        DB_NAME
+      )
+        .fallbackToDestructiveMigration()
+        .build()
+  }
 
 
 }

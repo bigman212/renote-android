@@ -23,70 +23,70 @@ import ru.bill.renote.model.dao.NotesDao
 
 @RunWith(AndroidJUnit4::class)
 class AppDatabaseTests {
-    private lateinit var database: AppDatabase
-    private lateinit var categoriesDao: CategoriesDao
-    private lateinit var notesDao : NotesDao
+  private lateinit var database: AppDatabase
+  private lateinit var categoriesDao: CategoriesDao
+  private lateinit var notesDao: NotesDao
 
-    @get:Rule
-    var instantTaskExecutorRule = InstantTaskExecutorRule()
+  @get:Rule
+  var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @Before
-    fun initDatabase() {
-        database = Room.inMemoryDatabaseBuilder(
-            InstrumentationRegistry.getInstrumentation().context,
-            AppDatabase::class.java
-        )
-            .allowMainThreadQueries()
-            .build()
-        categoriesDao = database.categoriesDao()
-        notesDao = database.notesDao()
-    }
+  @Before
+  fun initDatabase() {
+    database = Room.inMemoryDatabaseBuilder(
+      InstrumentationRegistry.getInstrumentation().context,
+      AppDatabase::class.java
+    )
+      .allowMainThreadQueries()
+      .build()
+    categoriesDao = database.categoriesDao()
+    notesDao = database.notesDao()
+  }
 
-    @Test
-    fun getNoteWhenTableIsEmpty(){
-        notesDao.noteById(10)
-            .test()
-            .assertNoValues()
-    }
+  @Test
+  fun getNoteWhenTableIsEmpty() {
+    notesDao.noteById(10)
+      .test()
+      .assertNoValues()
+  }
 
-    @Test
-    fun saveCategoryAndRead() {
-        val categoryToSave = EntitiesUtil.createCategory()
-        categoriesDao.save(categoryToSave)
+  @Test
+  fun saveCategoryAndRead() {
+    val categoryToSave = EntitiesUtil.createCategory()
+    categoriesDao.save(categoryToSave)
 
-        categoriesDao.categoryById(categoryToSave.id)
-            .test()
-            .assertValue(categoryToSave)
-            .dispose()
-    }
+    categoriesDao.categoryById(categoryToSave.id)
+      .test()
+      .assertValue(categoryToSave)
+      .dispose()
+  }
 
-    @Test
-    fun saveCategoriesAndReturnList(){
-        val firstCategory = EntitiesUtil.createCategory()
-        val secondCategory = EntitiesUtil.createCategory()
-        categoriesDao.save(firstCategory)
-        categoriesDao.save(secondCategory)
+  @Test
+  fun saveCategoriesAndReturnList() {
+    val firstCategory = EntitiesUtil.createCategory()
+    val secondCategory = EntitiesUtil.createCategory()
+    categoriesDao.save(firstCategory)
+    categoriesDao.save(secondCategory)
 
-        categoriesDao.all()
-            .test()
-            .assertValue(arrayListOf(firstCategory, secondCategory))
-    }
+    categoriesDao.all()
+      .test()
+      .assertValue(arrayListOf(firstCategory, secondCategory))
+  }
 
-    @Test
-    fun saveNotesAndReturnList() {
-        val categoriesToSave = EntitiesUtil.createCategories(5)
-        val notesToSave = EntitiesUtil.createNotes(5, categoriesToSave)
-        notesToSave.forEach { notesDao.save(it) }
+  @Test
+  fun saveNotesAndReturnList() {
+    val categoriesToSave = EntitiesUtil.createCategories(5)
+    val notesToSave = EntitiesUtil.createNotes(5, categoriesToSave)
+    notesToSave.forEach { notesDao.save(it) }
 
-        notesDao.all()
-            .test()
-            .assertNoErrors()
-            .assertValue(notesToSave)
-            .dispose()
-    }
+    notesDao.all()
+      .test()
+      .assertNoErrors()
+      .assertValue(notesToSave)
+      .dispose()
+  }
 
-    @After
-    fun closeDatabase(){
-        database.close()
-    }
+  @After
+  fun closeDatabase() {
+    database.close()
+  }
 }
