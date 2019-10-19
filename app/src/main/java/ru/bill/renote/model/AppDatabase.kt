@@ -5,16 +5,19 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import ru.bill.renote.model.dao.CategoriesDao
+import ru.bill.renote.model.dao.NoteCategoryDao
 import ru.bill.renote.model.dao.NotesDao
 import ru.bill.renote.model.entities.Category
 import ru.bill.renote.model.entities.Note
+import ru.bill.renote.model.entities.NoteCategoryJoin
 
 private const val DB_NAME = "notes.db"
 
-@Database(entities = [Note::class, Category::class], version = 1)
+@Database(entities = [Note::class, Category::class, NoteCategoryJoin::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
   abstract fun notesDao(): NotesDao
   abstract fun categoriesDao(): CategoriesDao
+  abstract fun noteCategoryDao(): NoteCategoryDao
 
   companion object {
     @Volatile
