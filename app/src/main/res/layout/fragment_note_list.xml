@@ -23,14 +23,13 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        tools:listitem="@android:layout/simple_list_item_activated_1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/linear_layout"
+        tools:listitem="@android:layout/simple_list_item_activated_1" />
 
 
     <LinearLayout
@@ -39,6 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/rv_notes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rv_categories">
 
@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="28dp"
-            android:text="Button"
+            android:text="Compact"
             app:layout_constraintEnd_toEndOf="parent"
             tools:layout_editor_absoluteY="496dp" />
 
@@ -57,10 +57,19 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="8dp"
-            android:text="Button"
+            android:text="Extended"
             app:layout_constraintBottom_toTopOf="@+id/rv_notes"
             app:layout_constraintEnd_toStartOf="@+id/button" />
     </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

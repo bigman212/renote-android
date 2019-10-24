@@ -5,13 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_note_list.*
 import ru.bill.renote.R
 
-class NoteListFragment : androidx.fragment.app.Fragment() {
+class NoteListFragment : Fragment() {
   private lateinit var viewModel: NotesViewModel
 
   companion object {
@@ -35,6 +36,10 @@ class NoteListFragment : androidx.fragment.app.Fragment() {
 //                    result.isError() -> tv_all.text = "ERROR"
 //                    result.isSuccessful() -> tv_all.text = result.data!!.toString()
         }
+      }
+
+      btn_fab.setOnClickListener {
+
       }
     })
 
