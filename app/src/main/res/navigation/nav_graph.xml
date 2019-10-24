@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/noteListFragment">
+
+    <fragment
+        android:id="@+id/noteListFragment"
+        android:name="ru.bill.renote.notes.list.NoteListFragment"
+        android:label="fragment_note_list"
+        tools:layout="@layout/fragment_note_list" >
+        <action
+            android:id="@+id/action_noteListFragment_to_noteCreateFragment"
+            app:destination="@id/noteCreateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/noteCreateFragment"
+        android:name="ru.bill.renote.notes.create.NoteCreateFragment"
+        android:label="NoteCreateFragment" >
+        <argument
+            android:name="amaount"
+            app:argType="integer" />
+    </fragment>
+</navigation>

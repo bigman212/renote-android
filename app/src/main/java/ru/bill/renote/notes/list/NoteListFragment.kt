@@ -8,9 +8,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_note_list.*
 import ru.bill.renote.R
+import ru.bill.renote.notes.create.NoteCreateFragment
+import ru.bill.renote.notes.create.NoteCreateFragmentArgs
 
 class NoteListFragment : Fragment() {
   private lateinit var viewModel: NotesViewModel
@@ -39,7 +42,9 @@ class NoteListFragment : Fragment() {
       }
 
       btn_fab.setOnClickListener {
-
+        val actionNoteListFragmentToNoteCreateFragment =
+          NoteListFragmentDirections.actionNoteListFragmentToNoteCreateFragment(2)
+        it.findNavController().navigate(actionNoteListFragmentToNoteCreateFragment)
       }
     })
 
