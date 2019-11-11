@@ -13,7 +13,8 @@
         android:name=".App"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="ru.bill.renote.MainActivity">
+        <activity android:name="ru.bill.renote.MainActivity"
+            android:windowSoftInputMode="adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
