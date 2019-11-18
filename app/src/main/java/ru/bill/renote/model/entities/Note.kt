@@ -2,6 +2,7 @@ package ru.bill.renote.model.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -20,4 +21,7 @@ data class Note(
 
   @ColumnInfo(name = "source_link")
   val sourceLink: String?
-)
+) {
+  @Ignore
+  constructor(title: String= "", body: String = "", link: String? = null) : this(0, title, body, link)
+}

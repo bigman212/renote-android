@@ -2,6 +2,7 @@ package ru.bill.renote.model.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "categories")
@@ -12,4 +13,7 @@ data class Category(
 
   @ColumnInfo(name = "name")
   val name: String
-)
+) {
+  @Ignore
+  constructor(name: String) : this(0, name)
+}
