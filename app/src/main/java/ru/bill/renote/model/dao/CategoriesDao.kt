@@ -13,7 +13,7 @@ import ru.bill.renote.model.entities.Category
 @Dao
 interface CategoriesDao {
     @Query("SELECT * FROM categories")
-    fun all(): Single<List<Category>>
+    fun all(): Flowable<List<Category>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun save(category: Category): Completable
