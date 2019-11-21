@@ -4,12 +4,16 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import ru.bill.renote.model.dao.CategoriesDao
 import ru.bill.renote.model.dao.NoteCategoryDao
 import ru.bill.renote.model.dao.NotesDao
 import ru.bill.renote.model.entities.Category
 import ru.bill.renote.model.entities.Note
 import ru.bill.renote.model.entities.NoteCategoryJoin
+
 
 private const val DB_NAME = "notes.db"
 
@@ -31,12 +35,27 @@ abstract class AppDatabase : RoomDatabase() {
     }
 
     private fun buildDatabase(context: Context) =
-      Room.databaseBuilder(
-        context.applicationContext, AppDatabase::class.java,
-        DB_NAME
-      )
+      Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, DB_NAME)
+        .addCallback(object: Callback(){
+          override fun onCreate(db: SupportSQLiteDatabase) {
+            super.onCreate(db)
+            val populate = populate()
+            instance(context).categoriesDao()
+              .saveAll(populate)
+              .subscribeOn(Schedulers.io())
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribe()
+          }
+        })
         .fallbackToDestructiveMigration()
         .build()
+
+    private fun populate(): ArrayList<Category> {
+      val c = Category("Music")
+      val c2 = Category("Hobby")
+      val c3 = Category("Programming")
+      return arrayListOf(c, c2, c3)
+    }
   }
 
 
