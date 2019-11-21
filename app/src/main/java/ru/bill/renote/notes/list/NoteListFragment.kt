@@ -2,9 +2,11 @@ package ru.bill.renote.notes.list
 
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.WorkerThread
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -12,11 +14,11 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_note_list.*
 import ru.bill.renote.R
-import ru.bill.renote.notes.create.NoteCreateFragment
-import ru.bill.renote.notes.create.NoteCreateFragmentArgs
+import ru.bill.renote.model.Resource
 
 class NoteListFragment : Fragment() {
   private lateinit var viewModel: NotesViewModel
+  private lateinit var rvAdapter: CategoriesListRVAdapter
 
   companion object {
     @JvmStatic
@@ -32,29 +34,28 @@ class NoteListFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     viewModel = ViewModelProviders.of(this).get(NotesViewModel::class.java)
-    viewModel.allNotes().observe(this, Observer { resource ->
-      resource?.let { result ->
-        when {
-//                    result.isLoading() -> tv_all.text = "LIOADING"
-//                    result.isError() -> tv_all.text = "ERROR"
-//                    result.isSuccessful() -> tv_all.text = result.data!!.toString()
-        }
-      }
 
-      btn_fab.setOnClickListener {
-        val actionNoteListFragmentToNoteCreateFragment =
-          NoteListFragmentDirections.actionNoteListFragmentToNoteCreateFragment(2)
-        it.findNavController().navigate(actionNoteListFragmentToNoteCreateFragment)
+    btn_fab.setOnClickListener {
+      val actionNoteListFragmentToNoteCreateFragment =
+        NoteListFragmentDirections.actionNoteListFragmentToNoteCreateFragment(2)
+      it.findNavController().navigate(actionNoteListFragmentToNoteCreateFragment)
+    }
+
+    rvAdapter = CategoriesListRVAdapter(mutableListOf())
+    rv_categories.adapter = rvAdapter
+
+    viewModel.allCategories().observe(this, Observer { resource ->
+      when (resource){
+        is Resource.Success -> {
+          rvAdapter.addAll(resource.data!!)
+        }
       }
     })
 
-    rv_categories.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(
-      this.context,
-      androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL,
-      false
-    )
-    rv_categories.adapter =
-      CategoriesListRVAdapter(listOf("CATEGORIES", "SCIENSE", "ALL", "NOTHING", "EVERYTHING"))
+  }
+
+  override fun onResume() {
+    super.onResume()
   }
 
   override fun onCreateView(

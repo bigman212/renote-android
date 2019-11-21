@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.rv_categories_item.view.*
 import ru.bill.renote.R
+import ru.bill.renote.model.entities.Category
 
-class CategoriesListRVAdapter(private val categoriesList: List<String>)
+class CategoriesListRVAdapter(private var categoriesList: MutableList<Category>)
   : RecyclerView.Adapter<CategoriesListRVAdapter.ViewHolder>()
 {
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -21,7 +22,13 @@ class CategoriesListRVAdapter(private val categoriesList: List<String>)
   }
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    holder.bind(categoriesList[position])
+    holder.bind(categoriesList[position].name)
+  }
+
+  fun addAll(categoriesList: List<Category>) {
+    this.categoriesList.clear()
+    this.categoriesList.addAll(categoriesList)
+    notifyDataSetChanged()
   }
 
   class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
