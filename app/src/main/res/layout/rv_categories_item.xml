@@ -4,7 +4,7 @@
     android:layout_marginStart="20dp"
     android:layout_height="wrap_content">
 
-    <Button
+    <ToggleButton
         android:id="@+id/tv_name"
         android:background="@drawable/category_button_shape"
         android:layout_width="wrap_content"

@@ -34,6 +34,8 @@ class CategoriesListRVAdapter(private var categoriesList: MutableList<Category>)
   class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(categoryTitle: String) {
       itemView.tv_name.text = categoryTitle
+      itemView.tv_name.textOn = null
+      itemView.tv_name.textOff = null
     }
   }
 }
