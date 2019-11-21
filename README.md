@@ -1,7 +1,7 @@
 # renote-android (WIP)
 App for keeping and remembering info.
 
-# Dependencies
+## Dependencies
 - Kotlin
 - Androidx Navigation Components
 - Room + RxJava 2
