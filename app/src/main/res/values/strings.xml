@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">renote-android</string>
+    <string name="et_note_title"><font size="20">Title</font></string>
 </resources>

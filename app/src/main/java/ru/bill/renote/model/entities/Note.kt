@@ -1,27 +1,27 @@
 package ru.bill.renote.model.entities
 
 import androidx.room.ColumnInfo
-import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "notes"
+  tableName = "notes"
 )
 data class Note(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val noteId: Long,
+  @PrimaryKey(autoGenerate = true)
+  @ColumnInfo(name = "id")
+  val id: Long,
 
-    @ColumnInfo(name = "title")
-    val title: String,
+  @ColumnInfo(name = "title")
+  val title: String,
 
-    @ColumnInfo(name = "body")
-    val body: String,
+  @ColumnInfo(name = "body")
+  val body: String,
 
-    @Embedded(prefix = "category_")
-    val category: Category,
-
-    @ColumnInfo(name = "source_link")
-    val sourceLink: String?
-)
+  @ColumnInfo(name = "source_link")
+  val sourceLink: String?
+) {
+  @Ignore
+  constructor(title: String= "", body: String = "", link: String? = null) : this(0, title, body, link)
+}

@@ -1,37 +1,41 @@
 package ru.bill.renote.notes.list
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.rv_categories_item.view.*
 import ru.bill.renote.R
+import ru.bill.renote.model.entities.Category
 
-class CategoriesListRVAdapter(private val strings: List<String>) :
-    androidx.recyclerview.widget.RecyclerView.Adapter<CategoriesListRVAdapter.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        return ViewHolder(inflater, parent)
+class CategoriesListRVAdapter(private var categoriesList: MutableList<Category>)
+  : RecyclerView.Adapter<CategoriesListRVAdapter.ViewHolder>()
+{
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    val inflater = LayoutInflater.from(parent.context)
+    val inflatedView = inflater.inflate(R.layout.rv_categories_item, parent, false)
+    return ViewHolder(inflatedView)
+  }
+
+  override fun getItemCount(): Int {
+    return categoriesList.size
+  }
+
+  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    holder.bind(categoriesList[position].name)
+  }
+
+  fun addAll(categoriesList: List<Category>) {
+    this.categoriesList.clear()
+    this.categoriesList.addAll(categoriesList)
+    notifyDataSetChanged()
+  }
+
+  class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    fun bind(categoryTitle: String) {
+      itemView.tv_name.text = categoryTitle
+      itemView.tv_name.textOn = null
+      itemView.tv_name.textOff = null
     }
-
-    override fun getItemCount(): Int {
-        return strings.size
-    }
-
-    override fun onBindViewHolder(p0: ViewHolder, p1: Int) {
-        p0.bind(strings[p1])
-    }
-
-    class ViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
-        androidx.recyclerview.widget.RecyclerView.ViewHolder(
-            inflater.inflate(
-                R.layout.recycler_view_categories_item,
-                parent,
-                false
-            )
-        )
-    {
-        fun bind(str: String) {
-            itemView.findViewById<Button>(R.id.tv_name).text = str
-        }
-    }
-
+  }
 }

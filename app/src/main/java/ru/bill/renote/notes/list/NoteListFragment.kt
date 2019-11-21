@@ -5,48 +5,64 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_note_list.*
 import ru.bill.renote.R
+import ru.bill.renote.model.Resource
 
-class NoteListFragment : androidx.fragment.app.Fragment() {
-    private lateinit var viewModel: NotesViewModel
+class NoteListFragment : Fragment() {
+  private lateinit var viewModel: NotesViewModel
+  private lateinit var rvCategoriesAdapter: CategoriesListRVAdapter
+  private lateinit var rvNotesAdapter: NotesListRVAdapter
 
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-                NoteListFragment().apply {
-                    //                arguments = Bundle().apply {
-//                    putString(ARG_PARAM1, param1)
-//                    putString(ARG_PARAM2, param2)
-//                }
-                }
+  companion object {
+    @JvmStatic
+    fun newInstance() =
+      NoteListFragment().apply {}
+  }
+
+  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    return inflater.inflate(R.layout.fragment_note_list, container, false)
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    viewModel = ViewModelProviders.of(this).get(NotesViewModel::class.java)
+
+    btn_fab.setOnClickListener {
+      val actionNoteListFragmentToNoteCreateFragment =
+        NoteListFragmentDirections.actionNoteListFragmentToNoteCreateFragment(2)
+      it.findNavController().navigate(actionNoteListFragmentToNoteCreateFragment)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(NotesViewModel::class.java)
-        viewModel.allNotes().observe(this, Observer { resource ->
-            resource?.let { result ->
-                when {
-//                    result.isLoading() -> tv_all.text = "LIOADING"
-//                    result.isError() -> tv_all.text = "ERROR"
-//                    result.isSuccessful() -> tv_all.text = result.data!!.toString()
-                }
-            }
-        })
+    rvCategoriesAdapter = CategoriesListRVAdapter(mutableListOf())
+    rv_categories.adapter = rvCategoriesAdapter
 
-        rv_categories.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(
-            this.context,
-            androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL,
-            false
-        )
-        rv_categories.adapter = CategoriesListRVAdapter(listOf("CATEGORIES", "SCIENSE", "ALL", "NOTHING", "EVERYTHING"))
-    }
+    rvNotesAdapter = NotesListRVAdapter(mutableListOf())
+    rv_notes.adapter = rvNotesAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_note_list, container, false)
-    }
+    viewModel.allCategories().observe(this, Observer { resource ->
+      when (resource) {
+        is Resource.Success -> {
+          rvCategoriesAdapter.addAll(resource.data!!)
+        }
+      }
+    })
+
+    viewModel.allNotes().observe(this, Observer { res ->
+      when (res) {
+        is Resource.Success -> {
+          rvNotesAdapter.addAll(res.data!!)
+        }
+      }
+    })
+
+  }
+
+  override fun onResume() {
+    super.onResume()
+  }
 }
