@@ -7,6 +7,8 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import ru.bill.renote.extensions.ioSubscribe
+import ru.bill.renote.extensions.uiObserve
 import ru.bill.renote.model.dao.CategoriesDao
 import ru.bill.renote.model.dao.NoteCategoryDao
 import ru.bill.renote.model.dao.NotesDao
@@ -39,12 +41,12 @@ abstract class AppDatabase : RoomDatabase() {
         .addCallback(object: Callback(){
           override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
-            val populate = populate()
             instance(context).categoriesDao()
-              .saveAll(populate)
-              .subscribeOn(Schedulers.io())
-              .observeOn(AndroidSchedulers.mainThread())
+              .saveAll(populate())
+              .ioSubscribe()
+              .uiObserve()
               .subscribe()
+              .dispose()
           }
         })
         .fallbackToDestructiveMigration()

@@ -3,9 +3,9 @@ package ru.bill.renote.notes.list
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import ru.bill.renote.App
+import ru.bill.renote.extensions.uiObserve
 import ru.bill.renote.model.Resource
 import ru.bill.renote.model.entities.Category
 import ru.bill.renote.model.entities.Note
@@ -21,7 +21,7 @@ class NotesViewModel : ViewModel() {
   init {
     val subscribeNotes = notesDao.all()
       .doOnSubscribe { notes.value = Resource.Loading() }
-      .observeOn(AndroidSchedulers.mainThread())
+      .uiObserve()
       .subscribe(
         { notes.value = Resource.Success(it) },
         { notes.value = Resource.Error(it) }
@@ -29,7 +29,7 @@ class NotesViewModel : ViewModel() {
 
     val subscribeCategories = categoriesDao.all()
       .doOnSubscribe { categories.value = Resource.Loading() }
-      .observeOn(AndroidSchedulers.mainThread())
+      .uiObserve()
       .subscribe(
         { categories.value = Resource.Success(it) },
         { categories.value = Resource.Error(it) }
@@ -37,6 +37,7 @@ class NotesViewModel : ViewModel() {
 
     subscriptions.addAll(subscribeNotes, subscribeCategories)
   }
+
 
   fun allNotes(): LiveData<Resource<List<Note>>> = notes
 
