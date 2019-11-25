@@ -54,6 +54,7 @@ class NoteCreateViewModel : ViewModel() {
           Log.d("TAG", "SAVED NOTE $it")
           saveNoteCategory(it)
         }
+        .defaultIfEmpty(0) // if saveNoteCategory returns empty
         .subscribe {
           Log.d("TAG", "SAVED NOTE CATEGORY $it")
           notesSaving.value = Resource.Success(Completable.complete())
