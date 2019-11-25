@@ -8,7 +8,10 @@ import kotlinx.android.synthetic.main.rv_categories_item.view.*
 import ru.bill.renote.R
 import ru.bill.renote.model.entities.Category
 
-class CategoriesListRVAdapter(private var categoriesList: MutableList<Category>)
+class CategoriesListRVAdapter(
+    private var categoriesList: MutableList<Category> = mutableListOf(),
+    private val onCategoryClicked: (clickedCategory: Category) -> Unit = {}
+)
   : RecyclerView.Adapter<CategoriesListRVAdapter.ViewHolder>()
 {
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -22,7 +25,7 @@ class CategoriesListRVAdapter(private var categoriesList: MutableList<Category>)
   }
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    holder.bind(categoriesList[position].name)
+    holder.bind(categoriesList[position], onCategoryClicked)
   }
 
   fun addAll(categoriesList: List<Category>) {
@@ -32,10 +35,13 @@ class CategoriesListRVAdapter(private var categoriesList: MutableList<Category>)
   }
 
   class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(categoryTitle: String) {
-      itemView.tv_name.text = categoryTitle
+    fun bind(categoryToBind: Category, onClickListener: (clickedCategory: Category) -> Unit ) {
+      itemView.tv_name.text = categoryToBind.name
       itemView.tv_name.textOn = null
       itemView.tv_name.textOff = null
+      itemView.tv_name.setOnCheckedChangeListener { compoundButton, b ->
+        onClickListener(categoryToBind)
+      }
     }
   }
 }
