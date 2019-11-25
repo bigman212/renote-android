@@ -5,8 +5,6 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import ru.bill.renote.extensions.ioSubscribe
 import ru.bill.renote.extensions.uiObserve
 import ru.bill.renote.model.dao.CategoriesDao
@@ -19,7 +17,7 @@ import ru.bill.renote.model.entities.NoteCategoryJoin
 
 private const val DB_NAME = "notes.db"
 
-@Database(entities = [Note::class, Category::class, NoteCategoryJoin::class], version = 1)
+@Database(entities = [Note::class, Category::class, NoteCategoryJoin::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
   abstract fun notesDao(): NotesDao
   abstract fun categoriesDao(): CategoriesDao
@@ -41,12 +39,12 @@ abstract class AppDatabase : RoomDatabase() {
         .addCallback(object: Callback(){
           override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
+            val populate = populate()
             instance(context).categoriesDao()
-              .saveAll(populate())
+              .saveAll(populate)
               .ioSubscribe()
               .uiObserve()
               .subscribe()
-              .dispose()
           }
         })
         .fallbackToDestructiveMigration()

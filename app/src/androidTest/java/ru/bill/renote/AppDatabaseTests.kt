@@ -57,6 +57,9 @@ class AppDatabaseTests {
   fun saveCategoryAndRead() {
     val categoryToSave = EntitiesUtil.createCategory()
     categoriesDao.save(categoryToSave)
+      .test()
+      .assertComplete()
+      .dispose()
 
     categoriesDao.categoryById(categoryToSave.id)
       .test()
@@ -70,8 +73,9 @@ class AppDatabaseTests {
   fun saveCategoriesAndReturnList() {
     val firstCategory = EntitiesUtil.createCategory()
     val secondCategory = EntitiesUtil.createCategory()
-    categoriesDao.save(firstCategory)
-    categoriesDao.save(secondCategory)
+    categoriesDao.saveAll(listOf(firstCategory, secondCategory))
+      .test()
+      .assertComplete()
 
     categoriesDao.all()
       .test()
@@ -85,8 +89,8 @@ class AppDatabaseTests {
   fun saveNotesAndCategoriesAndReturnLists() {
     val categoriesToSave = EntitiesUtil.createCategories(5)
     val notesToSave = EntitiesUtil.createNotes(5)
-    notesToSave.forEach(notesDao::save)
-    categoriesToSave.forEach(categoriesDao::save)
+    notesToSave.forEach { notesDao.save(it) }
+    categoriesToSave.forEach { categoriesDao.save(it) }
 
     notesDao.all()
       .test()
@@ -113,7 +117,7 @@ class AppDatabaseTests {
     val noteCategoryJoins =
       EntitiesUtil.createNoteCategoryJoins(notesToSave, categoriesToSave.first())
 
-    noteCategoryJoins.forEach(noteCategoryDao::insert)
+    noteCategoryJoins.forEach { noteCategoryDao.insert(it) }
 
     noteCategoryDao.notesForCategory(categoriesToSave.first().id)
       .test()
