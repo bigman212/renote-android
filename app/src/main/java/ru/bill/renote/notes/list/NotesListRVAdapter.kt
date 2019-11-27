@@ -5,11 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.chauthai.swipereveallayout.ViewBinderHelper
 import kotlinx.android.synthetic.main.rv_notes_item.view.*
 import ru.bill.renote.R
 import ru.bill.renote.model.entities.Note
 
 class NotesListRVAdapter(private var notesList: MutableList<Note> = mutableListOf()) : RecyclerView.Adapter<NotesListRVAdapter.ViewHolder>() {
+
+  private val viewBinderHelper = ViewBinderHelper()
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
     val inflater = LayoutInflater.from(parent.context)
@@ -22,8 +25,15 @@ class NotesListRVAdapter(private var notesList: MutableList<Note> = mutableListO
   }
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    val cellIsNotEven = position % 2 != 0 // begins from 0
-    holder.bind(notesList[position], cellIsNotEven)
+    val cellIsWhite = position % 2 != 0 // begins from 0
+    val noteToBind = notesList[position]
+
+    with(viewBinderHelper) {
+      setOpenOnlyOne(true)
+      bind(holder.itemView.swipe_layout, noteToBind.id.toString())
+      closeLayout(noteToBind.id.toString())
+    }
+    holder.bind(noteToBind, cellIsWhite)
   }
 
   fun addAll(notesList: List<Note>) {
@@ -34,17 +44,21 @@ class NotesListRVAdapter(private var notesList: MutableList<Note> = mutableListO
 
   class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(note: Note, cellIsNotEven: Boolean) {
-      itemView.tv_note_title.text = note.title
-      itemView.tv_note_body_cut.text = note.body.take(100)
-      if (note.body.length < 100) {
-        itemView.tv_note_body_cut.gradientEnabled = false
+      with(itemView) {
+        tv_note_title.text = note.title
+        tv_note_body_cut.text = note.body.take(120)
+        tv_note_body_cut.gradientEnabled = note.body.length > 120
+
+        val color =
+          if (cellIsNotEven)
+            R.color.colorEven
+          else
+            R.color.white
+
+        setBackgroundColor(ResourcesCompat.getColor(itemView.resources, color, null))
       }
-      val color =
-        if (cellIsNotEven)
-          R.color.colorEven
-        else
-          R.color.white
-      itemView.setBackgroundColor(ResourcesCompat.getColor(itemView.resources, color, null))
+
+
     }
   }
 }

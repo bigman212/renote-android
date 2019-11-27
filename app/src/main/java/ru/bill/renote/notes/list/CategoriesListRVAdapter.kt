@@ -38,7 +38,7 @@ class CategoriesListRVAdapter(
 
   class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(categoryToBind: Category, onClickListener: (clickedCategory: Category) -> Unit) {
-      itemView.tv_name.apply {
+      with(itemView.tv_name) {
         text = categoryToBind.name
         textOn = null
         textOff = null
