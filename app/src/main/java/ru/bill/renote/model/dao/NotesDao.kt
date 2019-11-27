@@ -4,18 +4,17 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import io.reactivex.Completable
-import io.reactivex.Flowable
 import io.reactivex.Maybe
+import io.reactivex.Observable
 import ru.bill.renote.model.entities.Note
 
 @Dao
 interface NotesDao {
     @Query("SELECT * FROM notes")
-    fun all(): Flowable<List<Note>>
+    fun all(): Observable<List<Note>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun save(note: Note) : Completable
+    fun save(note: Note) : Maybe<Long>
 
     @Query("SELECT * FROM notes WHERE id=:id LIMIT 1")
     fun noteById(id: Long): Maybe<Note>

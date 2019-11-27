@@ -38,7 +38,7 @@ class NoteListFragment : Fragment() {
       it.findNavController().navigate(actionNoteListFragmentToNoteCreateFragment)
     }
 
-    rvCategoriesAdapter = CategoriesListRVAdapter(mutableListOf())
+    rvCategoriesAdapter = CategoriesListRVAdapter(onCategoryClicked = viewModel::onCategoryClicked)
     rv_categories.adapter = rvCategoriesAdapter
 
     rvNotesAdapter = NotesListRVAdapter(mutableListOf())
@@ -48,6 +48,8 @@ class NoteListFragment : Fragment() {
       when (resource) {
         is Resource.Success -> {
           rvCategoriesAdapter.addAll(resource.data!!)
+        }
+        is Resource.Error -> {
         }
       }
     })

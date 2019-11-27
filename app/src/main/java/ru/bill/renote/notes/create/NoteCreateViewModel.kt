@@ -1,23 +1,27 @@
 package ru.bill.renote.notes.create
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import ru.bill.renote.App
+import ru.bill.renote.extensions.ioSubscribe
+import ru.bill.renote.extensions.uiObserve
 import ru.bill.renote.model.Resource
 import ru.bill.renote.model.entities.Category
 import ru.bill.renote.model.entities.Note
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import io.reactivex.Completable
-import io.reactivex.schedulers.Schedulers
+import ru.bill.renote.model.entities.NoteCategoryJoin
 
 
-class NoteCreateViewModel : ViewModel(){
+class NoteCreateViewModel : ViewModel() {
   private val notesDao = App.db.notesDao()
   private val categoriesDao = App.db.categoriesDao()
   private val noteCategoryDao = App.db.noteCategoryDao()
+
+  private val clickedCategories: MutableSet<Category> = mutableSetOf()
 
   private val subscriptions = CompositeDisposable()
   private val notesSaving: MutableLiveData<Resource<Completable>> = MutableLiveData()
@@ -26,23 +30,46 @@ class NoteCreateViewModel : ViewModel(){
   init {
     val subscribeCategories = categoriesDao.all()
       .doOnSubscribe { categories.value = Resource.Loading() }
-      .observeOn(AndroidSchedulers.mainThread())
+      .uiObserve()
       .subscribe(
         { categories.value = Resource.Success(it) },
         { categories.value = Resource.Error(it) }
       )
 
-    subscriptions.addAll(subscribeCategories)
+    subscriptions.add(subscribeCategories)
+  }
+
+  fun onCategoryClicked(category: Category) {
+    clickedCategories += category
   }
 
   fun saveNewNote(title: String, body: String) {
-    val subscribe = notesDao.save(Note(title, body))
-      .subscribeOn(Schedulers.io())
-      .doOnSubscribe { notesSaving.value = Resource.Loading() }
-      .observeOn(AndroidSchedulers.mainThread())
-      .subscribe { notesSaving.value = Resource.Success(Completable.complete()) }
-    subscriptions.add(subscribe)
+    val noteToCreate = Note(title, body)
+    subscriptions.add(
+      notesDao.save(noteToCreate)
+        .ioSubscribe()
+        .doOnSubscribe { notesSaving.value = Resource.Loading() }
+        .uiObserve()
+        .flatMapObservable {
+          Log.d("TAG", "SAVED NOTE $it")
+          saveNoteCategory(it)
+        }
+        .defaultIfEmpty(0) // if saveNoteCategory returns empty
+        .subscribe {
+          Log.d("TAG", "SAVED NOTE CATEGORY $it")
+          notesSaving.value = Resource.Success(Completable.complete())
+        }
+    )
   }
+
+  /**
+   * For each category save connected to it note
+   */
+  private fun saveNoteCategory(id: Long): Observable<Long> =
+    Observable.fromIterable(clickedCategories)
+      .flatMapMaybe { noteCategoryDao.insert(NoteCategoryJoin(id, it.id)) }
+      .ioSubscribe()
+      .uiObserve()
 
   fun noteSavingObservable(): LiveData<Resource<Completable>> = notesSaving
 
@@ -52,5 +79,4 @@ class NoteCreateViewModel : ViewModel(){
     super.onCleared()
     subscriptions.clear()
   }
-
 }
