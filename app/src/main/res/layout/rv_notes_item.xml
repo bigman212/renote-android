@@ -2,11 +2,25 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:paddingStart="15dp"
+    android:paddingEnd="10dp"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_note_title"
         style="@style/TextView_Note_Item_Title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="Science of Smile" />
+
+    <TextView
+        android:id="@+id/tv_note_body_cut"
+        style="@style/TextView_Note_Item_Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:layout_marginBottom="15dp"
+        android:text="Lorem ipsum dolor sit amet constnnjfa fjkaflajl fajlfkjalfaj lfa jflalakfjal alfja " />
 </LinearLayout>

@@ -2,17 +2,17 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_checked="true">
         <shape>
+            <solid android:color="@color/colorAccent" />
             <corners android:radius="3pt" />
-            <padding android:bottom="9pt" android:left="15pt" android:right="15pt" android:top="9pt" />
-            <solid android:color="#C7A843" />
+            <padding android:left="@dimen/padding_category_item" android:right="@dimen/padding_category_item" />
         </shape>
     </item>
 
     <item>
         <shape>
             <corners android:radius="3pt" />
-            <padding android:bottom="9pt" android:left="15pt" android:right="15pt" android:top="9pt" />
-            <solid android:color="@color/colorAccent" />
+            <padding android:left="@dimen/padding_category_item" android:right="@dimen/padding_category_item" />
+            <solid android:color="#68FFD857" />
         </shape>
     </item>
 </selector>
