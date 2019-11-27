@@ -9,20 +9,22 @@ import ru.bill.renote.R
 import ru.bill.renote.model.entities.Category
 
 class CategoriesListRVAdapter(
-    private var categoriesList: MutableList<Category> = mutableListOf(),
+    private val categoriesList: MutableList<Category> = mutableListOf(),
     private val onCategoryClicked: (clickedCategory: Category) -> Unit = {}
-)
-  : RecyclerView.Adapter<CategoriesListRVAdapter.ViewHolder>()
-{
+) : RecyclerView.Adapter<CategoriesListRVAdapter.ViewHolder>() {
+
+  companion object {
+    // needed to check toggled categories to retain them active after onPause()
+    private var toggledCategoriesIds = listOf<Long>()
+  }
+
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
     val inflater = LayoutInflater.from(parent.context)
     val inflatedView = inflater.inflate(R.layout.rv_categories_item, parent, false)
     return ViewHolder(inflatedView)
   }
 
-  override fun getItemCount(): Int {
-    return categoriesList.size
-  }
+  override fun getItemCount(): Int = categoriesList.size
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.bind(categoriesList[position], onCategoryClicked)
@@ -35,12 +37,21 @@ class CategoriesListRVAdapter(
   }
 
   class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(categoryToBind: Category, onClickListener: (clickedCategory: Category) -> Unit ) {
-      itemView.tv_name.text = categoryToBind.name
-      itemView.tv_name.textOn = null
-      itemView.tv_name.textOff = null
-      itemView.tv_name.setOnCheckedChangeListener { compoundButton, b ->
-        onClickListener(categoryToBind)
+    fun bind(categoryToBind: Category, onClickListener: (clickedCategory: Category) -> Unit) {
+      itemView.tv_name.apply {
+        text = categoryToBind.name
+        textOn = null
+        textOff = null
+        isChecked = categoryToBind.id in toggledCategoriesIds
+
+        setOnCheckedChangeListener { _, toggled ->
+          toggledCategoriesIds = if (toggled) {
+            toggledCategoriesIds.plus(categoryToBind.id)
+          } else {
+            toggledCategoriesIds.minus(categoryToBind.id)
+          }
+          onClickListener(categoryToBind)
+        }
       }
     }
   }
