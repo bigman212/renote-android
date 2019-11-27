@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import io.reactivex.Completable
 import ru.bill.renote.extensions.ioSubscribe
 import ru.bill.renote.extensions.uiObserve
 import ru.bill.renote.model.dao.CategoriesDao
@@ -36,12 +37,14 @@ abstract class AppDatabase : RoomDatabase() {
 
     private fun buildDatabase(context: Context) =
       Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, DB_NAME)
-        .addCallback(object: Callback(){
+        .addCallback(object : Callback() {
           override fun onCreate(db: SupportSQLiteDatabase) {
             super.onCreate(db)
-            val populate = populate()
-            instance(context).categoriesDao()
-              .saveAll(populate)
+            val dbRoom = instance(context)
+            Completable.concatArray(
+              dbRoom.categoriesDao().saveAll(populateCategories()),
+              dbRoom.notesDao().saveAll(populateNotes())
+            )
               .ioSubscribe()
               .uiObserve()
               .subscribe()
@@ -50,12 +53,25 @@ abstract class AppDatabase : RoomDatabase() {
         .fallbackToDestructiveMigration()
         .build()
 
-    private fun populate(): ArrayList<Category> {
-      val c = Category("Music")
-      val c2 = Category("Hobby")
-      val c3 = Category("Programming")
-      return arrayListOf(c, c2, c3)
-    }
+    private fun populateCategories(): List<Category> = listOf(
+      Category("Music"),
+      Category("Hobby"),
+      Category("Programming"),
+      Category("ReNoteing")
+    )
+
+    private fun populateNotes(): List<Note> = listOf(
+      Note(
+        "Science of Smile",
+        "Just smile, smile, smile! " +
+            "IS IT JUST ME OR IS IT GETTING CRAZIER OUT THERE? " +
+            "I USED TO THINK MY LIFE WAS A TRAGEDY... " +
+            "ALL I HAVE ARE NEGATIVE THOUGHTS. " +
+            "YOU WOULDN'T GET IT. " +
+            "YOU GET WHAT YOU F**KING DESERVE!"
+      ),
+      Note("ReNoting is hot!", "Keep moving forward!")
+    )
   }
 
 
