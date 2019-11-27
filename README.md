@@ -1,3 +1,4 @@
+![alt text](https://img.shields.io/codefactor/grade/github/bigman212/renote-android/master?style=flat-square)
 # renote-android (WIP)
 App for keeping and remembering info.
 
