@@ -1,5 +1,5 @@
-![alt text](https://img.shields.io/codefactor/grade/github/bigman212/renote-android/master?style=flat-square)
 # renote-android (WIP)
+[![CodeFactor](https://www.codefactor.io/repository/github/bigman212/renote-android/badge)](https://www.codefactor.io/repository/github/bigman212/renote-android)  
 App for keeping and remembering info.
 
 ## Dependencies
