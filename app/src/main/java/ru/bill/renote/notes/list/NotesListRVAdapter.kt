@@ -22,7 +22,8 @@ class NotesListRVAdapter(private var notesList: MutableList<Note> = mutableListO
   }
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    holder.bind(notesList[position], position)
+    val cellIsNotEven = position % 2 != 0 // begins from 0
+    holder.bind(notesList[position], cellIsNotEven)
   }
 
   fun addAll(notesList: List<Note>) {
@@ -32,15 +33,19 @@ class NotesListRVAdapter(private var notesList: MutableList<Note> = mutableListO
   }
 
   class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(note: Note, position: Int) {
+    fun bind(note: Note, cellIsNotEven: Boolean) {
       itemView.tv_note_title.text = note.title
-
-      if (position.rem(2) != 0) {
-        val grey = ResourcesCompat.getColor(itemView.resources, R.color.colorEven, null)
-        itemView.setBackgroundColor(grey)
+      itemView.tv_note_body_cut.text = note.body.take(100)
+      if (note.body.length < 100) {
+        itemView.tv_note_body_cut.gradientEnabled = false
       }
+      val color =
+        if (cellIsNotEven)
+          R.color.colorEven
+        else
+          R.color.white
+      itemView.setBackgroundColor(ResourcesCompat.getColor(itemView.resources, color, null))
     }
   }
-
 }
 
