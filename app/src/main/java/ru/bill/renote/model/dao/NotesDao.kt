@@ -24,5 +24,5 @@ interface NotesDao {
     fun noteById(id: Long): Maybe<Note>
 
     @Query("DELETE FROM notes WHERE id=:id")
-    fun delete(id: Long)
+    fun delete(id: Long) : Completable
 }

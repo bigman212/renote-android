@@ -8,9 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import kotlinx.android.synthetic.main.rv_notes_item.view.*
 import ru.bill.renote.R
+import ru.bill.renote.extensions.addIfNotExists
 import ru.bill.renote.model.entities.Note
 
-class NotesListRVAdapter(private var notesList: MutableList<Note> = mutableListOf()) : RecyclerView.Adapter<NotesListRVAdapter.ViewHolder>() {
+class NotesListRVAdapter(private var notesList: MutableList<Note> = mutableListOf(),
+                         private val onDeleteClicked: (noteToDelete: Note) -> Unit)
+  : RecyclerView.Adapter<NotesListRVAdapter.ViewHolder>() {
 
   private val viewBinderHelper = ViewBinderHelper()
 
@@ -33,6 +36,7 @@ class NotesListRVAdapter(private var notesList: MutableList<Note> = mutableListO
       bind(holder.itemView.swipe_layout, noteToBind.id.toString())
       closeLayout(noteToBind.id.toString())
     }
+    holder.itemView.btn_delete_note.setOnClickListener {onDeleteClicked(noteToBind)}
     holder.bind(noteToBind, cellIsWhite)
   }
 
@@ -40,6 +44,19 @@ class NotesListRVAdapter(private var notesList: MutableList<Note> = mutableListO
     this.notesList.clear()
     this.notesList.addAll(notesList)
     notifyDataSetChanged()
+  }
+
+  fun add(note: Note){
+    this.notesList.addIfNotExists(note)
+    notifyItemInserted(notesList.indexOf(note))
+  }
+
+  fun remove(note: Note){
+    val indexOfElement = notesList.indexOf(note)
+    if (indexOfElement != -1){
+      this.notesList.remove(note)
+      notifyItemRemoved(indexOfElement)
+    }
   }
 
   class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
