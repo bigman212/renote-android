@@ -18,7 +18,7 @@ interface NotesDao {
     fun save(note: Note) : Maybe<Long>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun saveAll(notes: List<Note>) : Completable
+    fun saveAll(notes: List<Note>) : Maybe<List<Long>>
 
     @Query("SELECT * FROM notes WHERE id=:id LIMIT 1")
     fun noteById(id: Long): Maybe<Note>
