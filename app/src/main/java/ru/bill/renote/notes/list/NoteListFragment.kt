@@ -1,6 +1,8 @@
 package ru.bill.renote.notes.list
 
 
+import android.annotation.SuppressLint
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -48,6 +50,19 @@ class NoteListFragment : Fragment() {
     rvNotesAdapter = NotesListRVAdapter(onDeleteClicked = this::onDeleteIconClicked)
     rv_notes.adapter = rvNotesAdapter
 
+
+    btn_extend.setOnClickListener {
+      btn_extend.typeface = Typeface.DEFAULT_BOLD
+      btn_compact.typeface = Typeface.DEFAULT
+      rvNotesAdapter.viewHolderIsExtended = true
+    }
+
+    btn_compact.setOnClickListener {
+      btn_extend.typeface = Typeface.DEFAULT
+      btn_compact.typeface = Typeface.DEFAULT_BOLD
+      rvNotesAdapter.viewHolderIsExtended = false
+    }
+
     viewModel.allCategories().observe(this, Observer { resource ->
       when (resource) {
         is Resource.Success -> {
@@ -65,25 +80,24 @@ class NoteListFragment : Fragment() {
         }
       }
     })
-
   }
 
   private fun onDeleteIconClicked(clickedNote: Note) {
     rvNotesAdapter.remove(clickedNote)
-    Snackbar
-      .make(requireView(), "Note is deleted", Snackbar.LENGTH_LONG)
+    Snackbar.make(requireView(), "Note is deleted", Snackbar.LENGTH_LONG)
       .setAction("UNDO") {
         rv_notes.recycledViewPool.clear()
         rvNotesAdapter.add(clickedNote)
       }
       .addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+        @SuppressLint("SwitchIntDef")
         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
           super.onDismissed(transientBottomBar, event)
-          if (event == Snackbar.Callback.DISMISS_EVENT_SWIPE ||
-            event == Snackbar.Callback.DISMISS_EVENT_MANUAL ||
-            event == Snackbar.Callback.DISMISS_EVENT_TIMEOUT
-          ) {
-            viewModel.onDeleteClicked(clickedNote).subscribe()
+          when (event) {
+            Snackbar.Callback.DISMISS_EVENT_SWIPE,
+            Snackbar.Callback.DISMISS_EVENT_MANUAL,
+            Snackbar.Callback.DISMISS_EVENT_TIMEOUT ->
+              viewModel.onDeleteClicked(clickedNote).subscribe()
           }
         }
       }).show()
