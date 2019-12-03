@@ -30,4 +30,17 @@
         <item name="android:typeface">monospace</item>
         <item name="android:textSize">16sp</item>
     </style>
+
+    <style name="myStyle">
+        <item name="android:textSize">9px</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="myStyle2">
+        <item name="android:textSize">9px</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:textStyle">normal</item>
+    </style>
 </resources>
