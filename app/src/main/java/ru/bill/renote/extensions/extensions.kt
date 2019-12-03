@@ -39,5 +39,11 @@ fun <T> Maybe<T>.ioSubscribe(): Maybe<T> {
   return subscribeOn(Schedulers.io())
 }
 
+fun <T> MutableCollection<T>.addIfNotExists(element: T) {
+  if (element !in this){
+    this.add(element)
+  }
+}
+
 
 

@@ -7,7 +7,6 @@ import androidx.room.Query
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
-import io.reactivex.Single
 import ru.bill.renote.model.entities.Category
 
 @Dao
@@ -19,7 +18,7 @@ interface CategoriesDao {
     fun save(category: Category): Completable
 
     @Insert
-    fun saveAll(categories: List<Category>): Completable
+    fun saveAll(categories: List<Category>): Maybe<List<Long>>
 
     @Query("SELECT * FROM categories WHERE id=:id LIMIT 1")
     fun categoryById(id: Long): Maybe<Category>

@@ -3,10 +3,12 @@ package ru.bill.renote.notes.list
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import ru.bill.renote.App
+import ru.bill.renote.extensions.ioSubscribe
 import ru.bill.renote.extensions.uiObserve
 import ru.bill.renote.model.Resource
 import ru.bill.renote.model.entities.Category
@@ -58,6 +60,12 @@ class NotesViewModel : ViewModel() {
     else
       clickedCategories += category
     observableOfCategories.onNext(clickedCategories)
+  }
+
+  fun onDeleteClicked(noteToDelete: Note) : Completable {
+    return notesDao.delete(noteToDelete.id)
+      .ioSubscribe()
+      .uiObserve()
   }
 
   fun allNotes(): LiveData<Resource<List<Note>>> = notes
