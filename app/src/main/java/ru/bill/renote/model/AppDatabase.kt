@@ -43,7 +43,8 @@ abstract class AppDatabase : RoomDatabase() {
             val dbRoom = instance(context)
             Completable.concatArray(
               dbRoom.categoriesDao().saveAll(populateCategories()),
-              dbRoom.notesDao().saveAll(populateNotes())
+              dbRoom.notesDao().saveAll(populateNotes()),
+              dbRoom.noteCategoryDao().insert(populateNoteCategoryJoin()).flatMapCompletable { Completable.complete() }
             )
               .ioSubscribe()
               .uiObserve()
@@ -57,21 +58,23 @@ abstract class AppDatabase : RoomDatabase() {
       Category("Music"),
       Category("Hobby"),
       Category("Programming"),
-      Category("ReNoteing")
+      Category("ReNoting")
     )
 
     private fun populateNotes(): List<Note> = listOf(
       Note(
         "Science of Smile",
-        "Just smile, smile, smile! " +
-            "IS IT JUST ME OR IS IT GETTING CRAZIER OUT THERE? " +
-            "I USED TO THINK MY LIFE WAS A TRAGEDY... " +
-            "ALL I HAVE ARE NEGATIVE THOUGHTS. " +
-            "YOU WOULDN'T GET IT. " +
-            "YOU GET WHAT YOU F**KING DESERVE!"
+        "1) Just smile, smile, smile!\n" +
+            "2) IS IT JUST ME OR IS IT GETTING CRAZIER OUT THERE?\n" +
+            "3) I USED TO THINK MY LIFE WAS A TRAGEDY...\n" +
+            "4) ALL I HAVE ARE NEGATIVE THOUGHTS.\n" +
+            "5) YOU WOULDN'T GET IT.\n" +
+            "6) YOU GET WHAT YOU F**KING DESERVE!"
       ),
       Note("ReNoting is hot!", "Keep moving forward!")
     )
+
+    private fun populateNoteCategoryJoin(): NoteCategoryJoin = NoteCategoryJoin(2, 4)
   }
 
 

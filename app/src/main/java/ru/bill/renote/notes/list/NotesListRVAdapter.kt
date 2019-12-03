@@ -16,6 +16,11 @@ class NotesListRVAdapter(private var notesList: MutableList<Note> = mutableListO
   : RecyclerView.Adapter<NotesListRVAdapter.ViewHolder>() {
 
   private val viewBinderHelper = ViewBinderHelper()
+  var viewHolderIsExtended = false
+  set(value) {
+    field = value
+    notifyDataSetChanged()
+  }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
     val inflater = LayoutInflater.from(parent.context)
@@ -37,7 +42,7 @@ class NotesListRVAdapter(private var notesList: MutableList<Note> = mutableListO
       closeLayout(noteToBind.id.toString())
     }
     holder.itemView.btn_delete_note.setOnClickListener {onDeleteClicked(noteToBind)}
-    holder.bind(noteToBind, cellIsWhite)
+    holder.bind(noteToBind, cellIsWhite, viewHolderIsExtended)
   }
 
   fun addAll(notesList: List<Note>) {
@@ -60,11 +65,10 @@ class NotesListRVAdapter(private var notesList: MutableList<Note> = mutableListO
   }
 
   class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(note: Note, cellIsNotEven: Boolean) {
+    fun bind(note: Note, cellIsNotEven: Boolean, showExtendedBody: Boolean = false) {
       with(itemView) {
         tv_note_title.text = note.title
-        tv_note_body_cut.text = note.body.take(120)
-        tv_note_body_cut.gradientEnabled = note.body.length > 120
+        tv_note_body.text = if (showExtendedBody) note.body else note.compactBody
 
         val color =
           if (cellIsNotEven)

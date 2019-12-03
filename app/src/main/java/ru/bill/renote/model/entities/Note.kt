@@ -24,4 +24,7 @@ data class Note(
 ) {
   @Ignore
   constructor(title: String= "", body: String = "", link: String? = null) : this(0, title, body, link)
+
+  @Ignore
+  val compactBody : String = body.take(120)
 }
