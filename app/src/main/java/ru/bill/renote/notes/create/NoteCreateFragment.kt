@@ -13,10 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.ui.NavigationUI
 import kotlinx.android.synthetic.main.fragment_note_create.*
-import ru.bill.renote.MainActivity
 import ru.bill.renote.R
 import ru.bill.renote.model.Resource
 import ru.bill.renote.notes.list.CategoriesListRVAdapter
@@ -32,11 +29,6 @@ class NoteCreateFragment : Fragment() {
     fun newInstance() = NoteCreateFragment().apply {}
   }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setHasOptionsMenu(true)
-  }
-
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     val contextThemeWrapper = ContextThemeWrapper(activity, R.style.Theme_Create_Note_Screen)
     val localInflater = inflater.cloneInContext(contextThemeWrapper)
@@ -50,9 +42,6 @@ class NoteCreateFragment : Fragment() {
     rvCategoriesAdapter = CategoriesListRVAdapter(onCategoryClicked = viewModel::onCategoryClicked)
     rv_categories.adapter = rvCategoriesAdapter
 
-    navController = Navigation.findNavController(view)
-    NavigationUI.setupActionBarWithNavController(activity as MainActivity, navController);
-
     viewModel.allCategories().observe(viewLifecycleOwner, Observer {
       when (it) {
         is Resource.Success -> {
@@ -64,7 +53,7 @@ class NoteCreateFragment : Fragment() {
     viewModel.noteSavingObservable().observe(viewLifecycleOwner, Observer {
       when (it) {
         is Resource.Success -> {
-          Toast.makeText(context, "готово", Toast.LENGTH_LONG).show()
+          Toast.makeText(context, "Note is saved", Toast.LENGTH_LONG).show()
           navController.navigateUp()
         }
       }
