@@ -70,7 +70,8 @@ class NotesListRVAdapter(
     fun bind(noteWithCategories: NoteWithCategories, cellIsNotEven: Boolean, showExtendedBody: Boolean = false) {
       with(itemView) {
         val (note, categories) = noteWithCategories
-        tv_note_title.text = "${note.title} (${reduceCategoryNames(categories)})"
+        tv_note_title.text = note.title
+        tv_note_category_name.text = reduceCategoryNames(categories)
         tv_note_body.text = if (showExtendedBody) note.body else note.compactBody
 
         val color =
@@ -87,7 +88,7 @@ class NotesListRVAdapter(
       return categories
         .map { it.name }
         .takeIf{ it.isNotEmpty() }
-        ?.reduce { acc, s -> "$acc $s" }
+        ?.reduce { acc, s -> "$acc\n$s" }
         ?: ""
     }
   }

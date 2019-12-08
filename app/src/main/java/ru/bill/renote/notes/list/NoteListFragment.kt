@@ -80,6 +80,9 @@ class NoteListFragment : Fragment() {
         is Resource.Success -> {
           rvNotesAdapter.addAll(res.data!!)
         }
+        is Resource.Error -> {
+          Log.e("tag", res.message!!)
+        }
       }
     })
   }

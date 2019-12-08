@@ -5,7 +5,6 @@ import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
 import ru.bill.renote.model.entities.Category
-import ru.bill.renote.model.entities.Note
 import ru.bill.renote.model.entities.NoteCategoryJoin
 import ru.bill.renote.model.entities.NoteWithCategories
 
@@ -22,14 +21,14 @@ interface NoteCategoryDao {
 
   @Query(
     """
-           SELECT DISTINCT id, title, body, source_link FROM notes
+           SELECT DISTINCT * FROM notes
            INNER JOIN note_category_join
            ON notes.id=note_category_join.noteId
            WHERE note_category_join.categoryId=:categoryId
            """
   )
   // using observable to return [] instead of empty maybe
-  fun notesForCategory(categoryId: Long): Observable<List<Note>>
+  fun notesForCategory(categoryId: Long): Single<List<NoteWithCategories>>
 
   @Query(
     """

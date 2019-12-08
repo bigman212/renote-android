@@ -1,7 +1,6 @@
 package ru.bill.renote.notes.create
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -13,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import kotlinx.android.synthetic.main.fragment_note_create.*
 import ru.bill.renote.R
 import ru.bill.renote.model.Resource
@@ -38,6 +38,7 @@ class NoteCreateFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     viewModel = ViewModelProviders.of(this).get(NoteCreateViewModel::class.java)
+    navController = Navigation.findNavController(view)
 
     rvCategoriesAdapter = CategoriesListRVAdapter(onCategoryClicked = viewModel::onCategoryClicked)
     rv_categories.adapter = rvCategoriesAdapter
@@ -67,7 +68,6 @@ class NoteCreateFragment : Fragment() {
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    Log.e("tag", "clicked")
     when (item.itemId) {
       android.R.id.home -> {
         navController.navigateUp()

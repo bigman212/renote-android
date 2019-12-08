@@ -28,14 +28,14 @@ class NotesViewModel : ViewModel() {
   private val categories: MutableLiveData<Resource<List<Category>>> = MutableLiveData()
 
   init {
-    val subscribeNotes = noteCategoryDao.notesWithCategory()
-      .ioSubscribe()
+    val subscribeNotes = observableOfCategories
+      .flatMap { noteCategoryDao.notesWithCategory() }
+      .map(this::filteredNotesByClickedCategories)
       .uiObserve()
       .subscribe(
         { notes.value = Resource.Success(it) },
         { notes.value = Resource.Error(it) }
       )
-//    observableOfCategories.onNext(clickedCategories)
 
     val subscribeCategories = categoriesDao.all()
       .doOnSubscribe { categories.value = Resource.Loading() }
@@ -46,6 +46,15 @@ class NotesViewModel : ViewModel() {
       )
 
     subscriptions.addAll(subscribeNotes, subscribeCategories)
+    observableOfCategories.onNext(clickedCategories)
+  }
+
+  private fun filteredNotesByClickedCategories(allNotes: List<NoteWithCategories>): List<NoteWithCategories> {
+    val categoryInClickedCategories = { category: Category -> category in clickedCategories }
+
+    return allNotes
+      .filter { noteWithCategory -> noteWithCategory.categories.any(categoryInClickedCategories) }
+      .ifEmpty { allNotes }
   }
 
   fun onCategoryClicked(category: Category) {

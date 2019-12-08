@@ -18,5 +18,5 @@ data class NoteWithCategories(
         entityColumn = "categoryId"
       )
     )
-    val noteCategories: List<Category>
+    val categories: List<Category>
 )
