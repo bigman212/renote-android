@@ -9,18 +9,20 @@ import com.chauthai.swipereveallayout.ViewBinderHelper
 import kotlinx.android.synthetic.main.rv_notes_item.view.*
 import ru.bill.renote.R
 import ru.bill.renote.extensions.addIfNotExists
-import ru.bill.renote.model.entities.Note
+import ru.bill.renote.model.entities.Category
+import ru.bill.renote.model.entities.NoteWithCategories
 
-class NotesListRVAdapter(private var notesList: MutableList<Note> = mutableListOf(),
-                         private val onDeleteClicked: (noteToDelete: Note) -> Unit)
-  : RecyclerView.Adapter<NotesListRVAdapter.ViewHolder>() {
+class NotesListRVAdapter(
+    private var notesList: MutableList<NoteWithCategories> = mutableListOf(),
+    private val onDeleteClicked: (noteToDelete: NoteWithCategories) -> Unit
+) : RecyclerView.Adapter<NotesListRVAdapter.ViewHolder>() {
 
   private val viewBinderHelper = ViewBinderHelper()
   var viewHolderIsExtended = false
-  set(value) {
-    field = value
-    notifyDataSetChanged()
-  }
+    set(value) {
+      field = value
+      notifyDataSetChanged()
+    }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
     val inflater = LayoutInflater.from(parent.context)
@@ -34,40 +36,41 @@ class NotesListRVAdapter(private var notesList: MutableList<Note> = mutableListO
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     val cellIsWhite = position % 2 != 0 // begins from 0
-    val noteToBind = notesList[position]
+    val noteWithCategoriesToBind = notesList[position]
 
     with(viewBinderHelper) {
       setOpenOnlyOne(true)
-      bind(holder.itemView.swipe_layout, noteToBind.id.toString())
-      closeLayout(noteToBind.id.toString())
+      bind(holder.itemView.swipe_layout, noteWithCategoriesToBind.toString())
+      closeLayout(noteWithCategoriesToBind.toString())
     }
-    holder.itemView.btn_delete_note.setOnClickListener {onDeleteClicked(noteToBind)}
-    holder.bind(noteToBind, cellIsWhite, viewHolderIsExtended)
+    holder.itemView.btn_delete_note.setOnClickListener { onDeleteClicked(noteWithCategoriesToBind) }
+    holder.bind(noteWithCategoriesToBind, cellIsWhite, viewHolderIsExtended)
   }
 
-  fun addAll(notesList: List<Note>) {
+  fun addAll(notesList: List<NoteWithCategories>) {
     this.notesList.clear()
     this.notesList.addAll(notesList)
     notifyDataSetChanged()
   }
 
-  fun add(note: Note){
+  fun add(note: NoteWithCategories) {
     this.notesList.addIfNotExists(note)
     notifyItemInserted(notesList.indexOf(note))
   }
 
-  fun remove(note: Note){
+  fun remove(note: NoteWithCategories) {
     val indexOfElement = notesList.indexOf(note)
-    if (indexOfElement != -1){
+    if (indexOfElement != -1) {
       this.notesList.remove(note)
       notifyItemRemoved(indexOfElement)
     }
   }
 
   class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    fun bind(note: Note, cellIsNotEven: Boolean, showExtendedBody: Boolean = false) {
+    fun bind(noteWithCategories: NoteWithCategories, cellIsNotEven: Boolean, showExtendedBody: Boolean = false) {
       with(itemView) {
-        tv_note_title.text = note.title
+        val (note, categories) = noteWithCategories
+        tv_note_title.text = "${note.title} (${reduceCategoryNames(categories)})"
         tv_note_body.text = if (showExtendedBody) note.body else note.compactBody
 
         val color =
@@ -78,8 +81,14 @@ class NotesListRVAdapter(private var notesList: MutableList<Note> = mutableListO
 
         setBackgroundColor(ResourcesCompat.getColor(itemView.resources, color, null))
       }
+    }
 
-
+    private fun reduceCategoryNames(categories: List<Category>): String {
+      return categories
+        .map { it.name }
+        .takeIf{ it.isNotEmpty() }
+        ?.reduce { acc, s -> "$acc $s" }
+        ?: ""
     }
   }
 }
