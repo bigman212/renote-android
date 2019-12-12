@@ -17,15 +17,15 @@ object EntitiesUtil {
 
    fun createProdNotes(): List<Note> = listOf(
     Note(
-      "Science of Smile",
-      "1) Just smile, smile, smile!\n" +
+      "Test of Smile",
+      "1) Just test, smile, smile!\n" +
           "2) IS IT JUST ME OR IS IT GETTING CRAZIER OUT THERE?\n" +
           "3) I USED TO THINK MY LIFE WAS A TRAGEDY...\n" +
           "4) ALL I HAVE ARE NEGATIVE THOUGHTS.\n" +
           "5) YOU WOULDN'T GET IT.\n" +
           "6) YOU GET WHAT YOU F**KING DESERVE!"
     ),
-    Note("ReNoting is hot!", "Keep moving forward!")
+    Note("Testing is hot!", "Keep moving testing!")
   )
 
   fun createCategory(): Category = Category((++categoryId).toLong(), "body $categoryId")
