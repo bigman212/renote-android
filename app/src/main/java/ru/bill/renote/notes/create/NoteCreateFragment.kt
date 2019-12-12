@@ -1,7 +1,6 @@
 package ru.bill.renote.notes.create
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -14,9 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.ui.NavigationUI
 import kotlinx.android.synthetic.main.fragment_note_create.*
-import ru.bill.renote.MainActivity
 import ru.bill.renote.R
 import ru.bill.renote.model.Resource
 import ru.bill.renote.notes.list.CategoriesListRVAdapter
@@ -32,11 +29,6 @@ class NoteCreateFragment : Fragment() {
     fun newInstance() = NoteCreateFragment().apply {}
   }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setHasOptionsMenu(true)
-  }
-
   override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
     val contextThemeWrapper = ContextThemeWrapper(activity, R.style.Theme_Create_Note_Screen)
     val localInflater = inflater.cloneInContext(contextThemeWrapper)
@@ -46,12 +38,10 @@ class NoteCreateFragment : Fragment() {
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
     viewModel = ViewModelProviders.of(this).get(NoteCreateViewModel::class.java)
+    navController = Navigation.findNavController(view)
 
     rvCategoriesAdapter = CategoriesListRVAdapter(onCategoryClicked = viewModel::onCategoryClicked)
     rv_categories.adapter = rvCategoriesAdapter
-
-    navController = Navigation.findNavController(view)
-    NavigationUI.setupActionBarWithNavController(activity as MainActivity, navController);
 
     viewModel.allCategories().observe(viewLifecycleOwner, Observer {
       when (it) {
@@ -64,7 +54,7 @@ class NoteCreateFragment : Fragment() {
     viewModel.noteSavingObservable().observe(viewLifecycleOwner, Observer {
       when (it) {
         is Resource.Success -> {
-          Toast.makeText(context, "готово", Toast.LENGTH_LONG).show()
+          Toast.makeText(context, "Note is saved", Toast.LENGTH_LONG).show()
           navController.navigateUp()
         }
       }
@@ -78,7 +68,6 @@ class NoteCreateFragment : Fragment() {
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    Log.e("tag", "clicked")
     when (item.itemId) {
       android.R.id.home -> {
         navController.navigateUp()

@@ -18,7 +18,7 @@ import ru.bill.renote.model.entities.Note
 import ru.bill.renote.model.entities.NoteCategoryJoin
 
 
-private const val DB_NAME = "notes.db"
+private const val DB_NAME = "notes"
 
 @Database(entities = [Note::class, Category::class, NoteCategoryJoin::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
@@ -49,10 +49,10 @@ abstract class AppDatabase : RoomDatabase() {
               dbRoom.notesDao().saveAll(populateNotes()), BiFunction { t1: List<Long>, t2: List<Long> ->
                   Log.d("pre-populating:", t1.toString())
                   Log.d("pre-populating:", t2.toString())
-                  NoteCategoryJoin(t1[0], t2[0])
+                  listOf(NoteCategoryJoin(t1[0], t2[0]), NoteCategoryJoin(t1[0], t2[1]))
               })
               .ioSubscribe()
-              .flatMap { dbRoom.noteCategoryDao().insert(it) }
+              .flatMap { dbRoom.noteCategoryDao().insertAll(it) }
               .ioSubscribe()
               .uiObserve()
               .subscribe()

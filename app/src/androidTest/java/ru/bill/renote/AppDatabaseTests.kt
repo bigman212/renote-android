@@ -89,8 +89,16 @@ class AppDatabaseTests {
   fun saveNotesAndCategoriesAndReturnLists() {
     val categoriesToSave = EntitiesUtil.createCategories(5)
     val notesToSave = EntitiesUtil.createNotes(5)
-    notesToSave.forEach { notesDao.save(it) }
-    categoriesToSave.forEach { categoriesDao.save(it) }
+
+    notesDao.saveAll(notesToSave)
+      .test()
+      .assertNoErrors()
+      .assertComplete()
+
+    categoriesDao.saveAll(categoriesToSave)
+      .test()
+      .assertNoErrors()
+      .assertComplete()
 
     notesDao.all()
       .test()
@@ -109,21 +117,33 @@ class AppDatabaseTests {
 
   @Test
   fun saveNoteCategoryJoinsAndReturnList() {
-    val categoriesToSave = EntitiesUtil.createCategories(2)
-    val notesToSave = EntitiesUtil.createNotes(5)
-    notesToSave.forEach { notesDao.save(it) }
-    categoriesToSave.forEach { categoriesDao.save(it) }
+    val categoriesToSave = EntitiesUtil.createProdCategories()
+    val notesToSave = EntitiesUtil.createProdNotes()
+    notesDao.saveAll(notesToSave)
+      .test()
+      .assertNoErrors()
+      .assertComplete()
 
-    val noteCategoryJoins =
-      EntitiesUtil.createNoteCategoryJoins(notesToSave, categoriesToSave.first())
+    categoriesDao.saveAll(categoriesToSave)
+      .test()
+      .assertNoErrors()
+      .assertComplete()
 
-    noteCategoryJoins.forEach { noteCategoryDao.insert(it) }
+    val noteCategoryJoins = EntitiesUtil.createProdNoteCategoryJoins()
+    noteCategoryJoins.forEach { noteCategoryDao.insert(it).test().assertNoErrors() }
+
+
+    noteCategoryDao
+      .notesWithCategory()
+      .doOnNext{ println(it) }
+      .test()
+      .assertComplete()
 
     noteCategoryDao.notesForCategory(categoriesToSave.first().id)
       .test()
       .assertSubscribed()
       .assertNoErrors()
-      .assertValue(notesToSave)
+//      .assertValue(notesToSave)
       .dispose()
   }
 

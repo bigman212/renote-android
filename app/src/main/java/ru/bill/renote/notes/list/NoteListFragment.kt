@@ -4,6 +4,7 @@ package ru.bill.renote.notes.list
 import android.annotation.SuppressLint
 import android.graphics.Typeface
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_note_list.*
 import ru.bill.renote.R
 import ru.bill.renote.model.Resource
-import ru.bill.renote.model.entities.Note
+import ru.bill.renote.model.entities.NoteWithCategories
 
 
 class NoteListFragment : Fragment() {
@@ -69,6 +70,7 @@ class NoteListFragment : Fragment() {
           rvCategoriesAdapter.addAll(resource.data!!)
         }
         is Resource.Error -> {
+          Log.e("tag", resource.message!!)
         }
       }
     })
@@ -78,11 +80,14 @@ class NoteListFragment : Fragment() {
         is Resource.Success -> {
           rvNotesAdapter.addAll(res.data!!)
         }
+        is Resource.Error -> {
+          Log.e("tag", res.message!!)
+        }
       }
     })
   }
 
-  private fun onDeleteIconClicked(clickedNote: Note) {
+  private fun onDeleteIconClicked(clickedNote: NoteWithCategories) {
     rvNotesAdapter.remove(clickedNote)
     Snackbar.make(requireView(), "Note is deleted", Snackbar.LENGTH_LONG)
       .setAction("UNDO") {
@@ -97,7 +102,7 @@ class NoteListFragment : Fragment() {
             Snackbar.Callback.DISMISS_EVENT_SWIPE,
             Snackbar.Callback.DISMISS_EVENT_MANUAL,
             Snackbar.Callback.DISMISS_EVENT_TIMEOUT ->
-              viewModel.onDeleteClicked(clickedNote).subscribe()
+              viewModel.onDeleteClicked(clickedNote.note).subscribe()
           }
         }
       }).show()
