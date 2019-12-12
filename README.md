@@ -1,6 +1,7 @@
 # renote-android (WIP)
 [![CodeFactor](https://www.codefactor.io/repository/github/bigman212/renote-android/badge)](https://www.codefactor.io/repository/github/bigman212/renote-android)  
-App for keeping and remembering info, using cards.
+App for keeping and remembering info, using cards.  
+[Try it here](https://github.com/bigman212/renote-android/releases)
 
 ## Features
 - [x] Note manager
