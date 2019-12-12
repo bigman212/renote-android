@@ -13,8 +13,9 @@ App for keeping and remembering info, using cards.
 - [x] create note creation view - screen, ViewModel, connect M with VM
 - [x] implement note addition
 - [x] implement note deletion with swipe
-- [x] **release v0.1!**
+- [x] **release v0.2!** (no need for v0.1)
 - [x] implement note connected categories preview
+- [x] **release v0.3!**
 - [ ] polish design
 - [ ] "Remember mode"
 - [ ] connect websites link to note 
