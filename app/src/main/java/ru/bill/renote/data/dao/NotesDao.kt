@@ -1,4 +1,4 @@
-package ru.bill.renote.model.dao
+package ru.bill.renote.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -7,7 +7,7 @@ import androidx.room.Query
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
-import ru.bill.renote.model.entities.Note
+import ru.bill.renote.data.entities.Note
 
 @Dao
 interface NotesDao {

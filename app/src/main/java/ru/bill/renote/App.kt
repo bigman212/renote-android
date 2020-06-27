@@ -1,7 +1,7 @@
 package ru.bill.renote
 
 import android.app.Application
-import ru.bill.renote.model.AppDatabase
+import ru.bill.renote.data.AppDatabase
 
 class App : Application() {
   companion object {

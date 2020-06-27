@@ -1,8 +1,8 @@
 package ru.bill.renote
 
-import ru.bill.renote.model.entities.Category
-import ru.bill.renote.model.entities.Note
-import ru.bill.renote.model.entities.NoteCategoryJoin
+import ru.bill.renote.data.entities.Category
+import ru.bill.renote.data.entities.Note
+import ru.bill.renote.data.entities.NoteCategoryJoin
 
 object EntitiesUtil {
   private var categoryId: Int = 0
@@ -16,16 +16,16 @@ object EntitiesUtil {
   }
 
    fun createProdNotes(): List<Note> = listOf(
-    Note(
-      "Test of Smile",
-      "1) Just test, smile, smile!\n" +
-          "2) IS IT JUST ME OR IS IT GETTING CRAZIER OUT THERE?\n" +
-          "3) I USED TO THINK MY LIFE WAS A TRAGEDY...\n" +
-          "4) ALL I HAVE ARE NEGATIVE THOUGHTS.\n" +
-          "5) YOU WOULDN'T GET IT.\n" +
-          "6) YOU GET WHAT YOU F**KING DESERVE!"
-    ),
-    Note("Testing is hot!", "Keep moving testing!")
+     Note(
+       "Test of Smile",
+       "1) Just test, smile, smile!\n" +
+           "2) IS IT JUST ME OR IS IT GETTING CRAZIER OUT THERE?\n" +
+           "3) I USED TO THINK MY LIFE WAS A TRAGEDY...\n" +
+           "4) ALL I HAVE ARE NEGATIVE THOUGHTS.\n" +
+           "5) YOU WOULDN'T GET IT.\n" +
+           "6) YOU GET WHAT YOU F**KING DESERVE!"
+     ),
+     Note("Testing is hot!", "Keep moving testing!")
   )
 
   fun createCategory(): Category = Category((++categoryId).toLong(), "body $categoryId")

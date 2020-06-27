@@ -1,4 +1,4 @@
-package ru.bill.renote.model.dao
+package ru.bill.renote.data.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -7,7 +7,7 @@ import androidx.room.Query
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
-import ru.bill.renote.model.entities.Category
+import ru.bill.renote.data.entities.Category
 
 @Dao
 interface CategoriesDao {

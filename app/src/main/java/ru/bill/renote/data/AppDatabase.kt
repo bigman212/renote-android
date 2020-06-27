@@ -1,4 +1,4 @@
-package ru.bill.renote.model
+package ru.bill.renote.data
 
 import android.content.Context
 import android.util.Log
@@ -8,20 +8,20 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import io.reactivex.Maybe
 import io.reactivex.functions.BiFunction
+import ru.bill.renote.data.dao.CategoriesDao
+import ru.bill.renote.data.dao.NoteCategoryDao
+import ru.bill.renote.data.dao.NotesDao
+import ru.bill.renote.data.entities.Category
+import ru.bill.renote.data.entities.Note
+import ru.bill.renote.data.entities.NoteCategoryJoin
 import ru.bill.renote.extensions.ioSubscribe
 import ru.bill.renote.extensions.uiObserve
-import ru.bill.renote.model.dao.CategoriesDao
-import ru.bill.renote.model.dao.NoteCategoryDao
-import ru.bill.renote.model.dao.NotesDao
-import ru.bill.renote.model.entities.Category
-import ru.bill.renote.model.entities.Note
-import ru.bill.renote.model.entities.NoteCategoryJoin
 
 
 private const val DB_NAME = "notes"
-
 @Database(entities = [Note::class, Category::class, NoteCategoryJoin::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
+
   abstract fun notesDao(): NotesDao
   abstract fun categoriesDao(): CategoriesDao
   abstract fun noteCategoryDao(): NoteCategoryDao

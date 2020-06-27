@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.rv_categories_item.view.*
 import ru.bill.renote.R
-import ru.bill.renote.model.entities.Category
+import ru.bill.renote.data.entities.Category
 
 class CategoriesListRVAdapter(
     private val categoriesList: MutableList<Category> = mutableListOf(),

@@ -8,12 +8,12 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import ru.bill.renote.App
+import ru.bill.renote.data.entities.Category
+import ru.bill.renote.data.entities.Note
+import ru.bill.renote.data.entities.NoteCategoryJoin
 import ru.bill.renote.extensions.ioSubscribe
 import ru.bill.renote.extensions.uiObserve
 import ru.bill.renote.model.Resource
-import ru.bill.renote.model.entities.Category
-import ru.bill.renote.model.entities.Note
-import ru.bill.renote.model.entities.NoteCategoryJoin
 
 
 class NoteCreateViewModel : ViewModel() {

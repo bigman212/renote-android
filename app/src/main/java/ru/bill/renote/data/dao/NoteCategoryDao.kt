@@ -1,12 +1,12 @@
-package ru.bill.renote.model.dao
+package ru.bill.renote.data.dao
 
 import androidx.room.*
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
-import ru.bill.renote.model.entities.Category
-import ru.bill.renote.model.entities.NoteCategoryJoin
-import ru.bill.renote.model.entities.NoteWithCategories
+import ru.bill.renote.data.entities.Category
+import ru.bill.renote.data.entities.NoteCategoryJoin
+import ru.bill.renote.data.entities.NoteWithCategories
 
 @Dao
 interface NoteCategoryDao {

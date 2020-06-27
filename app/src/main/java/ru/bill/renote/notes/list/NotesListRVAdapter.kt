@@ -8,9 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import kotlinx.android.synthetic.main.rv_notes_item.view.*
 import ru.bill.renote.R
+import ru.bill.renote.data.entities.Category
+import ru.bill.renote.data.entities.NoteWithCategories
 import ru.bill.renote.extensions.addIfNotExists
-import ru.bill.renote.model.entities.Category
-import ru.bill.renote.model.entities.NoteWithCategories
 
 class NotesListRVAdapter(
     private var notesList: MutableList<NoteWithCategories> = mutableListOf(),

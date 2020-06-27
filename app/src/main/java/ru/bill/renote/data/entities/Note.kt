@@ -1,4 +1,4 @@
-package ru.bill.renote.model.entities
+package ru.bill.renote.data.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -26,5 +26,6 @@ data class Note(
   constructor(title: String= "", body: String = "", link: String? = null) : this(0, title, body, link)
 
   @Ignore
+  @Transient
   val compactBody : String = body.take(120)
 }

@@ -1,4 +1,4 @@
-package ru.bill.renote.model.entities
+package ru.bill.renote.data.entities
 
 import androidx.room.Embedded
 import androidx.room.Junction
