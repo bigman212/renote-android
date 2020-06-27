@@ -1,27 +1,25 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
-
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion compile_sdk
     defaultConfig {
         applicationId "ru.bill.renote_android"
-        minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion min_sdk
+        targetSdkVersion target_sdk
+        versionCode version_code
+        versionName version_name
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+    buildFeatures {
+        viewBinding {
+            enabled = true
         }
     }
 
@@ -30,35 +28,86 @@ android {
         targetCompatibility = 1.8
     }
 
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-DEBUG'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            shrinkResources true
+            debuggable false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "renote-${variant.versionName}(${variant.versionCode}).apk"
+        }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
 
-    implementation "androidx.navigation:navigation-fragment-ktx:2.1.0"
-    implementation "androidx.navigation:navigation-ui-ktx:2.1.0"
+    def app_compat_version = "1.1.0"
+    implementation "androidx.appcompat:appcompat:$app_compat_version"
+    implementation "androidx.recyclerview:recyclerview:$app_compat_version"
+    implementation "com.google.android.material:material:$app_compat_version"
 
-    implementation 'androidx.room:room-runtime:2.2.2'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    kapt 'androidx.room:room-compiler:2.2.1'
+    def core_ktx_version = "1.3.0"
+    implementation "androidx.core:core-ktx:$core_ktx_version"
 
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
-    kapt 'androidx.lifecycle:lifecycle-compiler:2.1.0'
+    def constraint_layout_version = "1.1.3"
+    implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
 
-    implementation "io.reactivex.rxjava2:rxjava:2.2.9"
-    implementation "io.reactivex.rxjava2:rxandroid:2.1.0"
-    implementation 'androidx.room:room-rxjava2:2.2.2'
+    def swipe_reveal_version = "1.4.1"
+    implementation "com.chauthai.swipereveallayout:swipe-reveal-layout:$swipe_reveal_version"
 
-    testImplementation 'junit:junit:4.12'
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
+
+    def rxjava_version = "2.2.15"
+    implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
+
+    def rxjava_android_version = "2.1.1"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxjava_android_version"
+
+    def rxjava_room_version = "2.2.5"
+    implementation "androidx.room:room-rxjava2:$rxjava_room_version"
+
+    def lifecycle_version = "2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+
+    def moshi_version = "1.9.3"
+    implementation "com.squareup.moshi:moshi:$moshi_version"
+    implementation "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+
+    def retrofit_version = "2.9.0"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
+
+    def log_interceptor_version = "4.7.2"
+    implementation "com.squareup.okhttp3:logging-interceptor:$log_interceptor_version"
+
+    def timber_version = "4.7.1"
+    implementation "com.jakewharton.timber:timber:$timber_version"
+
+    testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
