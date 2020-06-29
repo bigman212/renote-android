@@ -1,17 +1,16 @@
 package ru.bill.renote
 
 import android.app.Application
-import ru.bill.renote.data.AppDatabase
+import ru.bill.renote.di.AppComponent
 
 class App : Application() {
-  companion object {
-    lateinit var instance: App
-    lateinit var db: AppDatabase
-  }
-
   override fun onCreate() {
     super.onCreate()
-    instance = this
-    db = AppDatabase.instance(this)
   }
+
+  private val appComponent: AppComponent by lazy {
+    AppComponent.init(this)
+  }
+
+  fun getApplicationProvider(): AppComponent = appComponent
 }

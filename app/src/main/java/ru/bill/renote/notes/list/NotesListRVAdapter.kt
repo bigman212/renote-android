@@ -9,7 +9,7 @@ import com.chauthai.swipereveallayout.ViewBinderHelper
 import kotlinx.android.synthetic.main.rv_notes_item.view.*
 import ru.bill.renote.R
 import ru.bill.renote.data.entities.Category
-import ru.bill.renote.data.entities.NoteWithCategories
+import ru.bill.renote.data.junctions.NoteWithCategories
 import ru.bill.renote.extensions.addIfNotExists
 
 class NotesListRVAdapter(
