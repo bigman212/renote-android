@@ -42,16 +42,16 @@ class CategoriesListRVAdapter(
         text = categoryToBind.name
         textOn = null
         textOff = null
-        isChecked = categoryToBind.id in toggledCategoriesIds
+//        isChecked = categoryToBind.id in toggledCategoriesIds
 
-        setOnCheckedChangeListener { _, toggled ->
-          toggledCategoriesIds = if (toggled) {
-            toggledCategoriesIds.plus(categoryToBind.id)
-          } else {
-            toggledCategoriesIds.minus(categoryToBind.id)
-          }
-          onClickListener(categoryToBind)
-        }
+//        setOnCheckedChangeListener { _, toggled ->
+//          toggledCategoriesIds = if (toggled) {
+//            toggledCategoriesIds.plus(categoryToBind.id)
+//          } else {
+//            toggledCategoriesIds.minus(categoryToBind.id)
+//          }
+//          onClickListener(categoryToBind)
+//        }
       }
     }
   }

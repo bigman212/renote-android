@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/swipe_layout"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_note_item"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:clipToPadding="false"
     android:orientation="vertical"
     app:dragEdge="right"
@@ -29,48 +30,58 @@
     </LinearLayout>
 
     <!--Main Layout-->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:paddingStart="15dp"
         android:paddingEnd="10dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <TextView
+            android:id="@+id/tv_note_title"
+            style="@style/TextView_Note_Item_Title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:text="Science of Smile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv_note_title"
-                style="@style/TextView_Note_Item_Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_weight="1"
-                android:text="Science of Smile" />
-
-            <TextView
-                android:id="@+id/tv_note_category_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-                android:layout_weight="1"
-                android:text="Hobby\nMusic\nQWERTY"
-                android:textAlignment="viewEnd" />
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_note_category_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
+            android:maxLines="2"
+            android:textAlignment="viewEnd"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Hobby\nMusic\nQWERTY" />
 
         <TextView
             android:id="@+id/tv_note_body"
             style="@style/TextView_Note_Item_Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
+            android:layout_marginStart="8dp"
             android:fontFamily="sans-serif-light"
-            android:text="Lorem ipsum dolor sit amet constnnjfa fjkaflajl fajlfkjalfaj lfa jflalakfjal alfja " />
-    </LinearLayout>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.937"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_note_category_name"
+            tools:text="Lorem ipsum dolor sit amet constnnjfa fjkaflajl fajlfkjalfaj lfa jflalakfjal alfja " />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.7" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </com.chauthai.swipereveallayout.SwipeRevealLayout>

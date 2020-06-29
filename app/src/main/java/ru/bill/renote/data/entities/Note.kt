@@ -4,14 +4,15 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity(
   tableName = Note.TABLE_NAME
 )
 data class Note(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = COLUMN_ID)
-    val id: Long,
+    val id: String,
 
     @ColumnInfo(name = COLUMN_TITLE)
     val title: String,
@@ -29,11 +30,12 @@ data class Note(
     const val COLUMN_TITLE = "title"
     const val COLUMN_BODY = "body"
     const val COLUMN_SOURCE_LINK = "source_link"
-  }
 
-  @Ignore
-  constructor(title: String = "", body: String = "", link: String? = null)
-      : this(0, title, body, link)
+    fun createNew(title: String = "", body: String = "", sourceLink: String? = null): Note {
+      val uuid = UUID.randomUUID().toString()
+      return Note(uuid, title, body, sourceLink)
+    }
+  }
 
   @Ignore
   @Transient

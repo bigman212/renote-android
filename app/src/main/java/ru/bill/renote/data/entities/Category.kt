@@ -2,14 +2,12 @@ package ru.bill.renote.data.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
-import androidx.room.PrimaryKey
+import java.util.*
 
 @Entity(tableName = Category.TABLE_NAME)
 data class Category(
-    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = COLUMN_ID)
-    val id: Long,
+    val id: String,
 
     @ColumnInfo(name = COLUMN_NAME)
     val name: String
@@ -19,8 +17,12 @@ data class Category(
 
     const val COLUMN_ID = "id"
     const val COLUMN_NAME = "name"
-  }
 
-  @Ignore
-  constructor(name: String) : this(0, name)
+    fun createNew(name: String = ""): Category {
+      return Category(
+        id = UUID.randomUUID().toString(),
+        name = name
+      )
+    }
+  }
 }

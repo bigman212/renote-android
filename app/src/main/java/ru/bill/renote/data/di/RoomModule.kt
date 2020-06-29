@@ -5,6 +5,7 @@ import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import ru.bill.renote.data.AppDatabase
+import ru.bill.renote.data.PrepopulateCallback
 import ru.bill.renote.data.dao.CategoriesDao
 import ru.bill.renote.data.dao.NoteCategoryDao
 import ru.bill.renote.data.dao.NotesDao
@@ -20,6 +21,7 @@ object RoomModule {
     return Room.databaseBuilder(
       context.applicationContext, AppDatabase::class.java, DB_NAME
     )
+      .addCallback(PrepopulateCallback())
       .build()
   }
 
