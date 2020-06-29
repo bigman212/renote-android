@@ -12,7 +12,7 @@ import javax.inject.Singleton
 @Component(
   modules = [RoomModule::class, AndroidModule::class]
 )
-interface AppComponent {
+interface AppComponent : AppProvider {
 
   fun inject(obj: MainActivity)
 

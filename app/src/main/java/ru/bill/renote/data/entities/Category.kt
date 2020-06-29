@@ -2,10 +2,12 @@ package ru.bill.renote.data.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity(tableName = Category.TABLE_NAME)
 data class Category(
+    @PrimaryKey
     @ColumnInfo(name = COLUMN_ID)
     val id: String,
 

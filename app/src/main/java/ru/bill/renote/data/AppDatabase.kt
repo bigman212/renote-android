@@ -10,7 +10,7 @@ import ru.bill.renote.data.entities.Note
 import ru.bill.renote.data.entities.NoteCategoryJoin
 
 
-@Database(entities = [Note::class, Category::class, NoteCategoryJoin::class], version = 2)
+@Database(entities = [Note::class, Category::class, NoteCategoryJoin::class], exportSchema = false, version = 2)
 abstract class AppDatabase : RoomDatabase() {
 
   abstract fun notesDao(): NotesDao

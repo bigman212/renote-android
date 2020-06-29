@@ -9,19 +9,15 @@ import javax.inject.Inject
 
 class MainActivity : BaseActivity(R.layout.activity_main) {
 
-  @Inject
-  internal lateinit var db : NotesDao
-
-
   override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
     appComponent.inject(this)
+    super.onCreate(savedInstanceState)
 
-    val host = supportFragmentManager
-      .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-
-    val navController = findNavController(R.id.nav_host_fragment)
+//
+//    val host = supportFragmentManager
+//      .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+//
+//    val navController = findNavController(R.id.nav_host_fragment)
   }
 
   override fun onSupportNavigateUp() = findNavController(R.id.nav_host_fragment).navigateUp()
