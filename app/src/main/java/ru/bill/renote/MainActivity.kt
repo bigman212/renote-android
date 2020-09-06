@@ -2,9 +2,7 @@ package ru.bill.renote
 
 import android.os.Bundle
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
-import ru.bill.renote.data.dao.NotesDao
-import javax.inject.Inject
+import ru.bill.renote.base.BaseActivity
 
 
 class MainActivity : BaseActivity(R.layout.activity_main) {

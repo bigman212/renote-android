@@ -23,9 +23,6 @@ interface AppComponent : AppProvider {
 
   companion object {
     fun init(application: Application): AppComponent {
-
-//      val androidToolsProvider = AndroidComponent.Builder.build(application)
-
       return DaggerAppComponent.factory()
         .create(application)
     }

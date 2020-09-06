@@ -1,4 +1,4 @@
-package ru.bill.renote.notes.create
+package ru.bill.renote.noteCreate
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package ru.bill.renote.extensions
+package ru.bill.renote.util
 
 import io.reactivex.Completable
 import io.reactivex.Flowable

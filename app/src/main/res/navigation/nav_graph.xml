@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/noteListFragment"
-        android:name="ru.bill.renote.notes.list.NoteListFragment"
+        android:name="ru.bill.renote.noteList.NoteListFragment"
         android:label="ReNote"
         tools:layout="@layout/fragment_note_list" >
         <action
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/noteCreateFragment"
-        android:name="ru.bill.renote.notes.create.NoteCreateFragment"
+        android:name="ru.bill.renote.noteCreate.NoteCreateFragment"
         android:label="Create new note" >
         <argument
             android:name="amaount"

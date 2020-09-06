@@ -4,7 +4,7 @@ import ru.bill.renote.data.dao.CategoriesDao
 import ru.bill.renote.data.dao.NoteCategoryDao
 import ru.bill.renote.data.dao.NotesDao
 
-interface AppDatabaseProvider {
+interface DbProvider {
   fun notesDao(): NotesDao
   fun categoriesDao(): CategoriesDao
   fun noteCategoryDao(): NoteCategoryDao

@@ -1,4 +1,4 @@
-package ru.bill.renote
+package ru.bill.renote.common.rx
 
 import io.reactivex.Completable
 import io.reactivex.Scheduler

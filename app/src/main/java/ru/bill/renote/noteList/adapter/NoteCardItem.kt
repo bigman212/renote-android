@@ -1,4 +1,4 @@
-package ru.bill.renote.notes.list
+package ru.bill.renote.noteList.adapter
 
 import android.view.View
 import com.xwray.groupie.viewbinding.BindableItem

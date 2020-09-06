@@ -1,7 +1,8 @@
-package ru.bill.renote
+package ru.bill.renote.base
 
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import ru.bill.renote.App
 import ru.bill.renote.di.AppComponent
 
 open class BaseActivity : AppCompatActivity {
