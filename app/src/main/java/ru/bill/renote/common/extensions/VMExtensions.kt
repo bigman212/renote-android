@@ -1,7 +1,8 @@
-package ru.bill.renote.util
+package ru.bill.renote.common.extensions
 
 import android.os.Looper
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.*
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -27,6 +28,27 @@ fun <T : Any> MutableLiveData<T>.delegate(): ReadWriteProperty<Any, T> {
 
     override fun getValue(thisRef: Any, property: KProperty<*>): T {
       return requireValue()
+    }
+  }
+}
+
+/**
+ * The ViewModelStoreOwner controls the scope of the ViewModel.
+ * It may be overridden with a different ViewModelStoreOwner,
+ * such as the host Activity or the parent fragment, in order to
+ * scope the lifetime of the ViewModel to the lifetime of the
+ * ViewModelStoreOwner that is passed in.
+ */
+inline fun <reified T : ViewModel> Fragment.viewModelWithProvider(
+    noinline ownerProducer: () -> ViewModelStoreOwner = { this },
+    crossinline provider: () -> T
+): Lazy<T> {
+  return viewModels(ownerProducer) {
+    object : ViewModelProvider.Factory {
+      override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        @Suppress("UNCHECKED_CAST")
+        return provider.invoke() as T
+      }
     }
   }
 }

@@ -1,11 +1,9 @@
-package ru.bill.renote.util
+package ru.bill.renote.common.extensions
 
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Maybe
-import io.reactivex.Observable
+import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import ru.bill.renote.common.rx.SchedulersProvider
 
 fun <T> Observable<T>.ioSubscribe(): Observable<T> {
   return subscribeOn(Schedulers.io())
@@ -39,11 +37,14 @@ fun <T> Maybe<T>.ioSubscribe(): Maybe<T> {
   return subscribeOn(Schedulers.io())
 }
 
-fun <T> MutableCollection<T>.addIfNotExists(element: T) {
-  if (element !in this){
-    this.add(element)
-  }
+fun <T> Single<T>.scheduleIoToUi(schedulers: SchedulersProvider): Single<T> {
+  return subscribeOn(schedulers.io()).observeOn(schedulers.ui())
 }
 
+fun <T> Single<T>.scheduleComputationToUi(schedulers: SchedulersProvider): Single<T> {
+  return subscribeOn(schedulers.computation()).observeOn(schedulers.ui())
+}
 
-
+fun Completable.scheduleIoToUi(schedulers: SchedulersProvider): Completable {
+  return subscribeOn(schedulers.io()).observeOn(schedulers.ui())
+}

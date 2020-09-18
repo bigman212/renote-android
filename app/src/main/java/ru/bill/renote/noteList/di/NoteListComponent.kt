@@ -1,14 +1,10 @@
 package ru.bill.renote.noteList.di
 
 import dagger.Component
-import ru.bill.renote.common.vm.ViewModelFactoryModule
-import ru.bill.renote.common.vm.ViewModelsModule
 import ru.bill.renote.di.AppProvider
 import ru.bill.renote.noteList.NoteListFragment
-import javax.inject.Singleton
 
-@Singleton
-@Component(dependencies = [AppProvider::class], modules = [ViewModelsModule::class, ViewModelFactoryModule::class])
+@Component(dependencies = [AppProvider::class])
 interface NoteListComponent {
   fun inject(obj: NoteListFragment)
 

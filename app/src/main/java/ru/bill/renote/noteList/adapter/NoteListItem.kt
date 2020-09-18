@@ -6,7 +6,7 @@ import ru.bill.renote.R
 import ru.bill.renote.data.junctions.NoteWithCategories
 import ru.bill.renote.databinding.RvNotesItemBinding
 
-class NoteCardItem(private val noteToBind: NoteWithCategories) : BindableItem<RvNotesItemBinding>() {
+class NoteListItem(private val noteToBind: NoteWithCategories) : BindableItem<RvNotesItemBinding>() {
 
   override fun getLayout(): Int = R.layout.rv_notes_item
 
@@ -16,7 +16,7 @@ class NoteCardItem(private val noteToBind: NoteWithCategories) : BindableItem<Rv
     with(viewBinding) {
       tvNoteTitle.text = noteToBind.note.title
       tvNoteBody.text = noteToBind.note.body
-      tvNoteCategoryName.text = noteToBind.categories.joinToString(separator = "\n")
+      tvNoteCategoryName.text = noteToBind.categories.joinToString(separator = System.lineSeparator())
     }
   }
 }

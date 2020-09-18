@@ -14,9 +14,9 @@ import androidx.room.Index
 )
 data class NoteCategoryJoin(
     @ColumnInfo(name = COLUMN_REF_NOTE_ID)
-    val noteId: String,
+    val noteId: Long,
     @ColumnInfo(name = COLUMN_REF_CATEGORY_ID)
-    val categoryId: String
+    val categoryId: Long
 ) {
   companion object {
     const val TABLE_NAME = "note_category_cross_ref"

@@ -12,6 +12,9 @@ import ru.bill.renote.data.entities.NoteCategoryJoin
 
 @Database(entities = [Note::class, Category::class, NoteCategoryJoin::class], exportSchema = false, version = 2)
 abstract class AppDatabase : RoomDatabase() {
+  companion object {
+    const val DB_NAME = "app.db"
+  }
 
   abstract fun notesDao(): NotesDao
   abstract fun categoriesDao(): CategoriesDao

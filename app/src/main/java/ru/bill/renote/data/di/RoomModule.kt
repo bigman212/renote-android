@@ -13,14 +13,12 @@ import javax.inject.Singleton
 
 @Module
 object RoomModule {
-  private const val DB_NAME = "app.db"
 
   @Singleton
   @Provides
-  fun provideRoomDb(context: Context): AppDatabase {
-    return Room.databaseBuilder(
-      context.applicationContext, AppDatabase::class.java, DB_NAME
-    )
+  fun provideRoomDb(applicationContext: Context): AppDatabase {
+    return Room
+      .databaseBuilder(applicationContext, AppDatabase::class.java, AppDatabase.DB_NAME)
       .addCallback(PrepopulateCallback())
       .build()
   }

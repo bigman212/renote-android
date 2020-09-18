@@ -7,9 +7,13 @@ import javax.inject.Inject
 
 open class BaseViewModel @Inject constructor() : ViewModel() {
 
-    protected val compositeDisposable: CompositeDisposable by lazy { CompositeDisposable() }
+    private val compositeDisposable: CompositeDisposable by lazy { CompositeDisposable() }
 
     val events: EventsQueue by lazy { EventsQueue() }
+
+    protected fun sendErrorEvent(error: Throwable) {
+        events.append(ErrorEvent(error.message ?: error.toString()))
+    }
 
     fun Disposable.disposeOnCleared() {
         compositeDisposable.add(this)
@@ -18,9 +22,5 @@ open class BaseViewModel @Inject constructor() : ViewModel() {
     override fun onCleared() {
         compositeDisposable.dispose()
         super.onCleared()
-    }
-
-    protected fun offerErrorEvent(error: Throwable) {
-        events.offer(ErrorEvent(error.message ?: error.toString()))
     }
 }

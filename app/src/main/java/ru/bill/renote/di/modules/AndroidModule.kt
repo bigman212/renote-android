@@ -1,4 +1,4 @@
-package ru.bill.renote.di
+package ru.bill.renote.di.modules
 
 import android.app.Application
 import android.content.Context
@@ -10,7 +10,5 @@ import javax.inject.Singleton
 object AndroidModule {
   @Singleton
   @Provides
-  fun provideContext(application: Application): Context {
-    return application.applicationContext
-  }
+  fun provideContext(application: Application): Context = application.applicationContext
 }
