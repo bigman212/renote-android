@@ -5,13 +5,13 @@ import ru.bill.renote.base.BaseViewModel
 import ru.bill.renote.common.extensions.delegate
 import ru.bill.renote.common.extensions.scheduleIoToUi
 import ru.bill.renote.common.rx.SchedulersProvider
-import ru.bill.renote.data.dao.NoteCategoryDao
-import ru.bill.renote.data.junctions.NoteWithCategories
+import ru.bill.renote.persist.dao.NoteCategoryDao
+import ru.bill.renote.persist.junctions.NoteWithCategories
 import timber.log.Timber
 import javax.inject.Inject
 
 class NoteListViewModel @Inject constructor(
-    private val notesDao: NoteCategoryDao, val schedulersProvider: SchedulersProvider
+    private val notesDao: NoteCategoryDao, private val schedulersProvider: SchedulersProvider
 ) : BaseViewModel() {
 
   sealed class ScreenState {
@@ -29,7 +29,7 @@ class NoteListViewModel @Inject constructor(
   private var state: ScreenState by viewState.delegate()
 
   fun fetchAllNotes() {
-    notesDao.loadAll()
+    notesDao.loadAllNotesWithCategories()
       .doOnSubscribe { state = ScreenState.Loading }
       .scheduleIoToUi(schedulersProvider)
       .subscribe(

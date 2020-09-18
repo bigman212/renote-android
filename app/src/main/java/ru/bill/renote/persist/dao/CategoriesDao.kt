@@ -1,12 +1,12 @@
-package ru.bill.renote.data.dao
+package ru.bill.renote.persist.dao
 
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
-import ru.bill.renote.data.entities.Category
-import ru.bill.renote.data.entities.Category.Companion.COLUMN_ID
-import ru.bill.renote.data.entities.Category.Companion.TABLE_NAME
+import ru.bill.renote.persist.entities.Category
+import ru.bill.renote.persist.entities.Category.Companion.COLUMN_ID
+import ru.bill.renote.persist.entities.Category.Companion.TABLE_NAME
 
 @Dao
 interface CategoriesDao {

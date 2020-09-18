@@ -1,4 +1,4 @@
-package ru.bill.renote.data.entities
+package ru.bill.renote.persist.entities
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

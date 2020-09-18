@@ -5,6 +5,7 @@
     android:id="@+id/swipe_note_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
     android:clipToPadding="false"
     android:orientation="vertical"
     app:dragEdge="right"
@@ -32,7 +33,7 @@
     <!--Main Layout-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:orientation="vertical"
@@ -46,27 +47,25 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_weight="1"
-            android:text="Science of My Big Smile"
-            app:layout_constraintEnd_toStartOf="@+id/tv_note_category_name"
-            app:layout_constraintHorizontal_bias="0.9"
+            android:text="Notes to remember before a Math exam comes"
+            app:layout_constraintEnd_toStartOf="@+id/tv_note_categories_names"
             app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintHorizontal_weight="4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_note_category_name"
+            android:id="@+id/tv_note_categories_names"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|end"
-            android:layout_marginTop="5dp"
-            android:maxLines="2"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
             android:textAlignment="viewEnd"
+            app:layout_constraintBottom_toTopOf="@+id/tv_note_body"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toEndOf="@+id/tv_note_title"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Hobby Of My Doggie Big Doggie \nMusic\nQWERTY Hobby\nMusic\nQWERTYHobby\nMusic\nQWERTY" />
+            tools:text="Hobby\nHobby\nHobby\nHobby\nHobby\nHobby\nHobby\nHobby\n" />
 
         <TextView
             android:id="@+id/tv_note_body"
@@ -76,6 +75,7 @@
             android:layout_marginTop="8dp"
             android:fontFamily="sans-serif-light"
             android:textAlignment="viewStart"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -3,8 +3,9 @@ package ru.bill.renote.noteList.adapter
 import android.view.View
 import com.xwray.groupie.viewbinding.BindableItem
 import ru.bill.renote.R
-import ru.bill.renote.data.junctions.NoteWithCategories
+import ru.bill.renote.persist.junctions.NoteWithCategories
 import ru.bill.renote.databinding.RvNotesItemBinding
+import ru.bill.renote.persist.entities.Category
 
 class NoteListItem(private val noteToBind: NoteWithCategories) : BindableItem<RvNotesItemBinding>() {
 
@@ -16,7 +17,10 @@ class NoteListItem(private val noteToBind: NoteWithCategories) : BindableItem<Rv
     with(viewBinding) {
       tvNoteTitle.text = noteToBind.note.title
       tvNoteBody.text = noteToBind.note.body
-      tvNoteCategoryName.text = noteToBind.categories.joinToString(separator = System.lineSeparator())
+      val categoriesTitles = noteToBind.categories
+        .map(Category::name)
+        .joinToString(separator = System.lineSeparator())
+      tvNoteCategoryName.text = categoriesTitles
     }
   }
 }

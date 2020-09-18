@@ -1,16 +1,16 @@
-package ru.bill.renote.data
+package ru.bill.renote.persist
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import ru.bill.renote.data.dao.CategoriesDao
-import ru.bill.renote.data.dao.NoteCategoryDao
-import ru.bill.renote.data.dao.NotesDao
-import ru.bill.renote.data.entities.Category
-import ru.bill.renote.data.entities.Note
-import ru.bill.renote.data.entities.NoteCategoryJoin
+import ru.bill.renote.persist.dao.CategoriesDao
+import ru.bill.renote.persist.dao.NoteCategoryDao
+import ru.bill.renote.persist.dao.NotesDao
+import ru.bill.renote.persist.entities.Category
+import ru.bill.renote.persist.entities.Note
+import ru.bill.renote.persist.entities.NoteCategoryCrossRef
 
 
-@Database(entities = [Note::class, Category::class, NoteCategoryJoin::class], exportSchema = false, version = 2)
+@Database(entities = [Note::class, Category::class, NoteCategoryCrossRef::class], exportSchema = false, version = 2)
 abstract class AppDatabase : RoomDatabase() {
   companion object {
     const val DB_NAME = "app.db"

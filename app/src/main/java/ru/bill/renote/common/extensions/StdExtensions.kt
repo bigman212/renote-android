@@ -6,6 +6,10 @@ fun <T> MutableCollection<T>.addIfNotExists(element: T) {
   }
 }
 
+fun Int.isEven(): Boolean {
+  return this % 2 == 0
+}
+
 
 
 

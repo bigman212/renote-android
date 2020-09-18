@@ -1,8 +1,8 @@
 package ru.bill.renote
 
-import ru.bill.renote.data.entities.Category
-import ru.bill.renote.data.entities.Note
-import ru.bill.renote.data.entities.NoteCategoryJoin
+import ru.bill.renote.persist.entities.Category
+import ru.bill.renote.persist.entities.Note
+import ru.bill.renote.persist.entities.NoteCategoryCrossRef
 
 object EntitiesUtil {
   private var categoryId: Int = 0
@@ -42,23 +42,23 @@ object EntitiesUtil {
     return listOf(Category("Hobby"), Category("Music"), Category("Programming"))
   }
 
-  fun createNoteCategoryJoins(notes: List<Note>, category: Category): List<NoteCategoryJoin> {
+  fun createNoteCategoryJoins(notes: List<Note>, category: Category): List<NoteCategoryCrossRef> {
     return notes.map {
-      NoteCategoryJoin(it.id, category.id)
+      NoteCategoryCrossRef(it.id, category.id)
     }
   }
 
   fun createProdNoteCategoryJoins(notes: List<Note> = createProdNotes(),
                                   categories: List<Category> = createProdCategories()
-  ) : List<NoteCategoryJoin>
+  ) : List<NoteCategoryCrossRef>
   {
     // "Science of Smile" -  Hobby, Music
     // "1) Just smile, smile, smile!\n"  -  Hobby
     return listOf(
-      NoteCategoryJoin(1, 1),
-      NoteCategoryJoin(1, 2),
+      NoteCategoryCrossRef(1, 1),
+      NoteCategoryCrossRef(1, 2),
 
-      NoteCategoryJoin(2, 1)
+      NoteCategoryCrossRef(2, 1)
       )
   }
 }

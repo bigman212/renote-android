@@ -1,12 +1,12 @@
-package ru.bill.renote.data.dao
+package ru.bill.renote.persist.dao
 
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
-import ru.bill.renote.data.entities.Note
-import ru.bill.renote.data.entities.Note.Companion.COLUMN_ID
-import ru.bill.renote.data.entities.Note.Companion.TABLE_NAME
+import ru.bill.renote.persist.entities.Note
+import ru.bill.renote.persist.entities.Note.Companion.COLUMN_ID
+import ru.bill.renote.persist.entities.Note.Companion.TABLE_NAME
 
 @Dao
 interface NotesDao {
