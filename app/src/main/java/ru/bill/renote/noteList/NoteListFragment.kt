@@ -2,6 +2,7 @@ package ru.bill.renote.noteList
 
 
 import android.content.Context
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.View
 import com.xwray.groupie.GroupAdapter
@@ -26,6 +27,10 @@ class NoteListFragment @Inject constructor(private val viewModelProvider: Provid
 
   private val viewModel: NoteListViewModel by viewModelWithProvider { viewModelProvider.get() }
 
+  private var isNoteListExtended = false
+
+  private var noteListGroupToView = listOf<NoteListItem>()
+
   override fun onAttach(context: Context) {
     NoteListComponent.init(appComponent).inject(this)
     super.onAttach(context)
@@ -34,11 +39,33 @@ class NoteListFragment @Inject constructor(private val viewModelProvider: Provid
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     super.onViewCreated(view, savedInstanceState)
 
-    binding.rvNotes.adapter = noteListAdapter
+    setupViews()
 
     observe(viewModel.viewState, ::renderState)
     observeEvents(viewModel.events, ::onEvent)
+  }
 
+  private fun setupViews() {
+    binding.rvNotes.adapter = noteListAdapter
+    binding.rvNotes.itemAnimator = null
+
+    binding.btnExtend.setOnClickListener {
+      noteListGroupToView = noteListGroupToView.map(NoteListItem::toItemWithExpandedBody)
+      refreshNoteList()
+      binding.btnExtend.setTypeface(null, Typeface.BOLD)
+      binding.btnCompact.setTypeface(null, Typeface.NORMAL)
+    }
+
+    binding.btnCompact.setOnClickListener {
+      noteListGroupToView = noteListGroupToView.map(NoteListItem::toItemWithShortBody)
+      refreshNoteList()
+      binding.btnCompact.setTypeface(null, Typeface.BOLD)
+      binding.btnExtend.setTypeface(null, Typeface.NORMAL)
+    }
+  }
+
+  override fun onResume() {
+    super.onResume()
     viewModel.fetchAllNotes()
   }
 
@@ -46,9 +73,14 @@ class NoteListFragment @Inject constructor(private val viewModelProvider: Provid
     Timber.e(state.toString())
     when (state) {
       is NoteListViewModel.ScreenState.Content -> {
-        noteListAdapter.update(state.data.map(::NoteListItem))
+        noteListGroupToView = state.data.map(::NoteListItem)
+        refreshNoteList()
       }
     }
+  }
+
+  private fun refreshNoteList() {
+    noteListAdapter.update(noteListGroupToView)
   }
 
 }

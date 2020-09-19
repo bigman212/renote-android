@@ -3,24 +3,48 @@ package ru.bill.renote.noteList.adapter
 import android.view.View
 import com.xwray.groupie.viewbinding.BindableItem
 import ru.bill.renote.R
-import ru.bill.renote.persist.junctions.NoteWithCategories
 import ru.bill.renote.databinding.RvNotesItemBinding
 import ru.bill.renote.persist.entities.Category
+import ru.bill.renote.persist.junctions.NoteWithCategories
+import java.util.*
 
-class NoteListItem(private val noteToBind: NoteWithCategories) : BindableItem<RvNotesItemBinding>() {
+
+class NoteListItem(
+    private val itemToBind: NoteWithCategories, private val bodyIsExpanded: Boolean = false
+) : BindableItem<RvNotesItemBinding>() {
+
+  override fun getId(): Long {
+    return UUID.fromString(itemToBind.note.id).mostSignificantBits and Long.MAX_VALUE
+  }
+
+  companion object {
+    const val SHORT_BODY_LINES = 2
+    const val EXPANDED_BODY_LINES = Integer.MAX_VALUE
+  }
+
+  fun toItemWithExpandedBody(): NoteListItem {
+    return NoteListItem(itemToBind = itemToBind, bodyIsExpanded = true)
+  }
+
+  fun toItemWithShortBody(): NoteListItem {
+    return NoteListItem(itemToBind = itemToBind, bodyIsExpanded = false)
+  }
+
+  override fun bind(viewBinding: RvNotesItemBinding, position: Int) {
+    with(viewBinding) {
+      tvNoteTitle.text = itemToBind.note.title
+
+      tvNoteBody.maxLines = if (bodyIsExpanded) EXPANDED_BODY_LINES else SHORT_BODY_LINES
+      tvNoteBody.text = itemToBind.note.body
+
+      val categoriesTitles = itemToBind.categories
+        .map(Category::name)
+        .joinToString(separator = System.lineSeparator())
+      tvNoteCategoriesNames.text = categoriesTitles
+    }
+  }
 
   override fun getLayout(): Int = R.layout.rv_notes_item
 
   override fun initializeViewBinding(view: View): RvNotesItemBinding = RvNotesItemBinding.bind(view)
-
-  override fun bind(viewBinding: RvNotesItemBinding, position: Int) {
-    with(viewBinding) {
-      tvNoteTitle.text = noteToBind.note.title
-      tvNoteBody.text = noteToBind.note.body
-      val categoriesTitles = noteToBind.categories
-        .map(Category::name)
-        .joinToString(separator = System.lineSeparator())
-      tvNoteCategoryName.text = categoriesTitles
-    }
-  }
 }
