@@ -32,6 +32,8 @@ fun <T : Any> MutableLiveData<T>.delegate(): ReadWriteProperty<Any, T> {
   }
 }
 
+private fun <T : Any> LiveData<T>.requireValue(): T = checkNotNull(value)
+
 /**
  * The ViewModelStoreOwner controls the scope of the ViewModel.
  * It may be overridden with a different ViewModelStoreOwner,
@@ -52,8 +54,6 @@ inline fun <reified T : ViewModel> Fragment.viewModelWithProvider(
     }
   }
 }
-
-private fun <T : Any> LiveData<T>.requireValue(): T = checkNotNull(value)
 
 inline fun <T> Fragment.observe(liveData: LiveData<T>, crossinline block: (T) -> Unit) {
   liveData.observe(this) {

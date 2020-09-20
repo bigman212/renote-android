@@ -9,8 +9,10 @@ import ru.bill.renote.persist.junctions.NoteWithCategories
 import java.util.*
 
 
-class NoteListItem(
-    private val itemToBind: NoteWithCategories, private val bodyIsExpanded: Boolean = false
+data class NoteListItem(
+    private val itemToBind: NoteWithCategories,
+    private val onNoteDeleteClick: (NoteWithCategories) -> Unit,
+    private val bodyIsExpanded: Boolean = false,
 ) : BindableItem<RvNotesItemBinding>() {
 
   override fun getId(): Long {
@@ -22,13 +24,9 @@ class NoteListItem(
     const val EXPANDED_BODY_LINES = Integer.MAX_VALUE
   }
 
-  fun toItemWithExpandedBody(): NoteListItem {
-    return NoteListItem(itemToBind = itemToBind, bodyIsExpanded = true)
-  }
+  fun toItemWithExpandedBody(): NoteListItem = copy(bodyIsExpanded = true)
 
-  fun toItemWithShortBody(): NoteListItem {
-    return NoteListItem(itemToBind = itemToBind, bodyIsExpanded = false)
-  }
+  fun toItemWithShortBody(): NoteListItem = copy(bodyIsExpanded = false)
 
   override fun bind(viewBinding: RvNotesItemBinding, position: Int) {
     with(viewBinding) {
@@ -41,6 +39,8 @@ class NoteListItem(
         .map(Category::name)
         .joinToString(separator = System.lineSeparator())
       tvNoteCategoriesNames.text = categoriesTitles
+
+      btnDeleteNote.setOnClickListener { onNoteDeleteClick.invoke(itemToBind) }
     }
   }
 

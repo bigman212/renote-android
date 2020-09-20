@@ -11,12 +11,6 @@ import ru.bill.renote.persist.junctions.NoteWithCategories
 
 @Dao
 interface NoteCategoryDao {
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun insert(noteCategoryJoin: NoteCategoryCrossRef): Completable
-
-  @Insert(onConflict = OnConflictStrategy.REPLACE)
-  fun insertAll(noteCategoryJoins: List<NoteCategoryCrossRef>): Completable
-
   @Transaction
   @Query("SELECT * from ${Note.TABLE_NAME}")
   fun loadAllNotesWithCategories(): Single<List<NoteWithCategories>>
@@ -24,4 +18,13 @@ interface NoteCategoryDao {
   @Transaction
   @Query("SELECT * from ${Category.TABLE_NAME}")
   fun loadAllCategoriesWithNotes(): Single<List<CategoryWithNotes>>
+
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  fun insert(noteCategoryJoin: NoteCategoryCrossRef): Completable
+
+  @Insert(onConflict = OnConflictStrategy.REPLACE)
+  fun insertAll(noteCategoryJoins: List<NoteCategoryCrossRef>): Completable
+
+  @Query("DELETE FROM ${NoteCategoryCrossRef.TABLE_NAME} WHERE ref_note_id = :noteId")
+  fun deleteByNoteId(noteId: String): Completable
 }

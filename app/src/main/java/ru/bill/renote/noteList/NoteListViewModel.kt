@@ -2,16 +2,19 @@ package ru.bill.renote.noteList
 
 import androidx.lifecycle.MutableLiveData
 import ru.bill.renote.base.BaseViewModel
+import ru.bill.renote.base.Event
+import ru.bill.renote.base.MessageEvent
 import ru.bill.renote.common.extensions.delegate
 import ru.bill.renote.common.extensions.scheduleIoToUi
 import ru.bill.renote.common.rx.SchedulersProvider
-import ru.bill.renote.persist.dao.NoteCategoryDao
+import ru.bill.renote.noteList.usecase.NoteListUseCase
 import ru.bill.renote.persist.junctions.NoteWithCategories
 import timber.log.Timber
 import javax.inject.Inject
 
 class NoteListViewModel @Inject constructor(
-    private val notesDao: NoteCategoryDao, private val schedulersProvider: SchedulersProvider
+    private val noteListUseCase: NoteListUseCase,
+    private val schedulersProvider: SchedulersProvider
 ) : BaseViewModel() {
 
   sealed class ScreenState {
@@ -25,11 +28,13 @@ class NoteListViewModel @Inject constructor(
     }
   }
 
+  data class NoteIsDeletedEvent(val deleteNoteItem: NoteWithCategories) : Event
+
   val viewState: MutableLiveData<ScreenState> = MutableLiveData(ScreenState.initial())
   private var state: ScreenState by viewState.delegate()
 
   fun fetchAllNotes() {
-    notesDao.loadAllNotesWithCategories()
+    noteListUseCase.getAllNotes()
       .doOnSubscribe { state = ScreenState.Loading }
       .scheduleIoToUi(schedulersProvider)
       .subscribe(
@@ -41,5 +46,19 @@ class NoteListViewModel @Inject constructor(
       ).disposeOnCleared()
   }
 
-
+  fun deleteNote(noteWithCategories: NoteWithCategories) {
+    noteListUseCase.deleteNote(noteWithCategories.note)
+      .doOnSubscribe { state = ScreenState.Loading }
+      .scheduleIoToUi(schedulersProvider)
+      .subscribe(
+        {
+          events.append(NoteIsDeletedEvent(noteWithCategories))
+          events.append(MessageEvent("Note deleted successfully"))
+        },
+        { error ->
+          Timber.e(error)
+          sendErrorEvent(error)
+        }
+      ).disposeOnCleared()
+  }
 }

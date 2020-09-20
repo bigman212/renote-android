@@ -9,9 +9,11 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import ru.bill.renote.R
 import ru.bill.renote.base.BaseFragment
+import ru.bill.renote.base.Event
 import ru.bill.renote.base.observeEvents
 import ru.bill.renote.common.extensions.observe
 import ru.bill.renote.common.extensions.viewModelWithProvider
+import ru.bill.renote.common.views.TypedSection
 import ru.bill.renote.common.views.viewBinding
 import ru.bill.renote.databinding.FragmentNoteListBinding
 import ru.bill.renote.noteList.adapter.NoteListItem
@@ -30,6 +32,7 @@ class NoteListFragment @Inject constructor(private val viewModelProvider: Provid
   private var isNoteListExtended = false
 
   private var noteListGroupToView = listOf<NoteListItem>()
+  private val section = TypedSection<NoteListItem>()
 
   override fun onAttach(context: Context) {
     NoteListComponent.init(appComponent).inject(this)
@@ -41,6 +44,8 @@ class NoteListFragment @Inject constructor(private val viewModelProvider: Provid
 
     setupViews()
 
+    noteListAdapter.add(section)
+
     observe(viewModel.viewState, ::renderState)
     observeEvents(viewModel.events, ::onEvent)
   }
@@ -50,17 +55,25 @@ class NoteListFragment @Inject constructor(private val viewModelProvider: Provid
     binding.rvNotes.itemAnimator = null
 
     binding.btnExtend.setOnClickListener {
-      noteListGroupToView = noteListGroupToView.map(NoteListItem::toItemWithExpandedBody)
+      section.update(section.getTypedGroups().map(NoteListItem::toItemWithExpandedBody))
       refreshNoteList()
       binding.btnExtend.setTypeface(null, Typeface.BOLD)
       binding.btnCompact.setTypeface(null, Typeface.NORMAL)
     }
 
     binding.btnCompact.setOnClickListener {
-      noteListGroupToView = noteListGroupToView.map(NoteListItem::toItemWithShortBody)
+      section.update(section.getTypedGroups().map(NoteListItem::toItemWithShortBody))
       refreshNoteList()
       binding.btnCompact.setTypeface(null, Typeface.BOLD)
       binding.btnExtend.setTypeface(null, Typeface.NORMAL)
+    }
+  }
+
+  override fun onEvent(event: Event) {
+    if (event is NoteListViewModel.NoteIsDeletedEvent) {
+      viewModel.fetchAllNotes()
+    } else {
+      super.onEvent(event)
     }
   }
 
@@ -73,14 +86,13 @@ class NoteListFragment @Inject constructor(private val viewModelProvider: Provid
     Timber.e(state.toString())
     when (state) {
       is NoteListViewModel.ScreenState.Content -> {
-        noteListGroupToView = state.data.map(::NoteListItem)
+        section.update(state.data.map { NoteListItem(it, viewModel::deleteNote) })
         refreshNoteList()
       }
     }
   }
 
   private fun refreshNoteList() {
-    noteListAdapter.update(noteListGroupToView)
   }
 
 }
