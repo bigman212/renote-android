@@ -21,8 +21,7 @@ class MainActivity : BaseActivity(R.layout.activity_main) {
     supportFragmentManager.fragmentFactory = fFactory
     super.onCreate(savedInstanceState)
 
-    val host = supportFragmentManager
-      .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+    val host = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 
     val navController = host.navController
     val appBarConfig = AppBarConfiguration(navController.graph)

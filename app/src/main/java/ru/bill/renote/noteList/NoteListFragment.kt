@@ -5,6 +5,9 @@ import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat.getDrawable
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.RecyclerView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import ru.bill.renote.R
@@ -53,6 +56,9 @@ class NoteListFragment @Inject constructor(private val viewModelProvider: Provid
   private fun setupViews() {
     binding.rvNotes.adapter = noteListAdapter
     binding.rvNotes.itemAnimator = null
+    val dividerItemDecoration = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
+    dividerItemDecoration.setDrawable(getDrawable(requireContext(), R.drawable.divider_note_list)!!)
+    binding.rvNotes.addItemDecoration(dividerItemDecoration)
 
     binding.btnExtend.setOnClickListener {
       section.update(section.getTypedGroups().map(NoteListItem::toItemWithExpandedBody))
