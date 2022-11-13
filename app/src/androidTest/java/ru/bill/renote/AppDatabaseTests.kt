@@ -9,10 +9,10 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import ru.bill.renote.model.AppDatabase
-import ru.bill.renote.model.dao.CategoriesDao
-import ru.bill.renote.model.dao.NoteCategoryDao
-import ru.bill.renote.model.dao.NotesDao
+import ru.bill.renote.persist.AppDatabase
+import ru.bill.renote.persist.dao.CategoriesDao
+import ru.bill.renote.persist.dao.NoteCategoryDao
+import ru.bill.renote.persist.dao.NotesDao
 
 
 /**

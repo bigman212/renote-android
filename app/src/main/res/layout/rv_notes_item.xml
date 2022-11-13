@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.chauthai.swipereveallayout.SwipeRevealLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/swipe_layout"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_note_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
     android:clipToPadding="false"
     android:orientation="vertical"
     app:dragEdge="right"
@@ -29,7 +31,7 @@
     </LinearLayout>
 
     <!--Main Layout-->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -38,39 +40,47 @@
         android:paddingStart="15dp"
         android:paddingEnd="10dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <TextView
+            android:id="@+id/tv_note_title"
+            style="@style/TextView_Note_Item_Title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="5dp"
+            android:text="Notes to remember before a Math exam comes"
+            app:layout_constraintEnd_toStartOf="@+id/tv_note_categories_names"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintHorizontal_weight="4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv_note_title"
-                style="@style/TextView_Note_Item_Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_weight="1"
-                android:text="Science of Smile" />
-
-            <TextView
-                android:id="@+id/tv_note_category_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-                android:layout_weight="1"
-                android:text="Hobby\nMusic\nQWERTY"
-                android:textAlignment="viewEnd" />
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_note_categories_names"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAlignment="viewEnd"
+            app:layout_constraintBottom_toTopOf="@+id/tv_note_body"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/tv_note_title"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Hobby\nHobby\nHobby\nHobby\nHobby\nHobby\nHobby\nHobby\n" />
 
         <TextView
             android:id="@+id/tv_note_body"
             style="@style/TextView_Note_Item_Body"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
+            android:layout_marginTop="8dp"
             android:fontFamily="sans-serif-light"
-            android:text="Lorem ipsum dolor sit amet constnnjfa fjkaflajl fajlfkjalfaj lfa jflalakfjal alfja " />
-    </LinearLayout>
+            android:textAlignment="viewStart"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_note_title"
+            tools:text="Lorem ipsum dolor sit amet constnnjfa fjkaflajl fajlfkjalfaj lfa jflalakfjal alfja " />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </com.chauthai.swipereveallayout.SwipeRevealLayout>

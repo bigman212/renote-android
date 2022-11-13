@@ -1,8 +1,8 @@
 package ru.bill.renote
 
-import ru.bill.renote.model.entities.Category
-import ru.bill.renote.model.entities.Note
-import ru.bill.renote.model.entities.NoteCategoryJoin
+import ru.bill.renote.persist.entities.Category
+import ru.bill.renote.persist.entities.Note
+import ru.bill.renote.persist.entities.NoteCategoryCrossRef
 
 object EntitiesUtil {
   private var categoryId: Int = 0
@@ -16,16 +16,16 @@ object EntitiesUtil {
   }
 
    fun createProdNotes(): List<Note> = listOf(
-    Note(
-      "Test of Smile",
-      "1) Just test, smile, smile!\n" +
-          "2) IS IT JUST ME OR IS IT GETTING CRAZIER OUT THERE?\n" +
-          "3) I USED TO THINK MY LIFE WAS A TRAGEDY...\n" +
-          "4) ALL I HAVE ARE NEGATIVE THOUGHTS.\n" +
-          "5) YOU WOULDN'T GET IT.\n" +
-          "6) YOU GET WHAT YOU F**KING DESERVE!"
-    ),
-    Note("Testing is hot!", "Keep moving testing!")
+     Note(
+       "Test of Smile",
+       "1) Just test, smile, smile!\n" +
+           "2) IS IT JUST ME OR IS IT GETTING CRAZIER OUT THERE?\n" +
+           "3) I USED TO THINK MY LIFE WAS A TRAGEDY...\n" +
+           "4) ALL I HAVE ARE NEGATIVE THOUGHTS.\n" +
+           "5) YOU WOULDN'T GET IT.\n" +
+           "6) YOU GET WHAT YOU F**KING DESERVE!"
+     ),
+     Note("Testing is hot!", "Keep moving testing!")
   )
 
   fun createCategory(): Category = Category((++categoryId).toLong(), "body $categoryId")
@@ -42,23 +42,23 @@ object EntitiesUtil {
     return listOf(Category("Hobby"), Category("Music"), Category("Programming"))
   }
 
-  fun createNoteCategoryJoins(notes: List<Note>, category: Category): List<NoteCategoryJoin> {
+  fun createNoteCategoryJoins(notes: List<Note>, category: Category): List<NoteCategoryCrossRef> {
     return notes.map {
-      NoteCategoryJoin(it.id, category.id)
+      NoteCategoryCrossRef(it.id, category.id)
     }
   }
 
   fun createProdNoteCategoryJoins(notes: List<Note> = createProdNotes(),
                                   categories: List<Category> = createProdCategories()
-  ) : List<NoteCategoryJoin>
+  ) : List<NoteCategoryCrossRef>
   {
     // "Science of Smile" -  Hobby, Music
     // "1) Just smile, smile, smile!\n"  -  Hobby
     return listOf(
-      NoteCategoryJoin(1, 1),
-      NoteCategoryJoin(1, 2),
+      NoteCategoryCrossRef(1, 1),
+      NoteCategoryCrossRef(1, 2),
 
-      NoteCategoryJoin(2, 1)
+      NoteCategoryCrossRef(2, 1)
       )
   }
 }
