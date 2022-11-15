@@ -17,7 +17,7 @@ data class CategoryEntity(
     companion object {
         const val TABLE_NAME = "categories"
 
-        const val COLUMN_ID = "id"
+        const val COLUMN_ID = "category_id"
         const val COLUMN_NAME = "name"
 
         fun createNew(name: String = ""): CategoryEntity {

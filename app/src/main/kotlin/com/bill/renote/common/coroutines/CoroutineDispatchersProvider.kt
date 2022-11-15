@@ -1,4 +1,4 @@
-package com.bill.renote.common.rx
+package com.bill.renote.common.coroutines
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

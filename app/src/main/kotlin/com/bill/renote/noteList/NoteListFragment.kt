@@ -1,76 +1,106 @@
 package com.bill.renote.noteList
 
-import androidx.core.content.ContextCompat.getDrawable
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
-import android.content.Context
-import android.graphics.Typeface
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.bill.renote.R
-import com.xwray.groupie.GroupAdapter
-import com.xwray.groupie.GroupieViewHolder
-import ru.bill.renote.R
-import com.bill.renote.base.BaseFragment
+import com.bill.renote.base.BaseViewModelFragment
 import com.bill.renote.base.Event
-import com.bill.renote.base.observeEvents
-import com.bill.renote.common.extensions.observe
-import com.bill.renote.common.extensions.viewModelWithProvider
-import com.bill.renote.common.views.TypedSection
-import com.bill.renote.common.views.viewBinding
+import com.bill.renote.common.extensions.getDrawable
+import com.bill.renote.common.extensions.setTextBold
+import com.bill.renote.common.extensions.setTextNormal
+import com.bill.renote.common.extensions.unsafeLazy
 import com.bill.renote.databinding.FragmentNoteListBinding
-import ru.bill.renote.databinding.FragmentNoteListBinding
-import com.bill.renote.noteList.adapter.NoteListItem
-import com.bill.renote.noteList.di.NoteListComponent
-import org.koin.java.KoinJavaComponent.inject
-import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Provider
+import com.bill.renote.noteList.adapter.CategoryListController
+import com.bill.renote.noteList.adapter.NoteListController
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class NoteListFragment constructor(private val viewModelProvider: Provider<NoteListViewModel>) :
-    BaseFragment(R.layout.fragment_note_list) {
+class NoteListFragment : BaseViewModelFragment<NoteListViewModel>() {
 
-    private val binding: FragmentNoteListBinding by viewBinding<FragmentNoteListBinding>()
-    private val noteListAdapter = GroupAdapter<GroupieViewHolder>()
+    private lateinit var binding: FragmentNoteListBinding
+    override val viewModel: NoteListViewModel by viewModel()
 
-    private val viewModel: NoteListViewModel by viewModelWithProvider { viewModelProvider.get() }
+    private val noteListController by unsafeLazy { NoteListController(viewModel::startDeleteNote) }
+    private val categoryListController = CategoryListController()
 
-    private var isNoteListExtended = false
-
-    private var noteListGroupToView = listOf<NoteListItem>()
-    private val section = TypedSection<NoteListItem>()
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_note_list, container, false).also {
+            binding = FragmentNoteListBinding.bind(it)
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupViews()
-
-        noteListAdapter.add(section)
-
-        observe(viewModel.viewState, ::renderState)
-        observeEvents(viewModel.events, ::onEvent)
+        viewModel.viewState.observe(viewLifecycleOwner){
+            renderState(it)
+        }
+//        observe(viewModel.viewState, ::renderState)
     }
 
     private fun setupViews() {
-        binding.rvNotes.adapter = noteListAdapter
-        binding.rvNotes.itemAnimator = null
-        val dividerItemDecoration = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
-        dividerItemDecoration.setDrawable(getDrawable(requireContext(), R.drawable.divider_note_list)!!)
-        binding.rvNotes.addItemDecoration(dividerItemDecoration)
+        with(binding.rvNotes) {
+            adapter = noteListController.adapter
+
+            val dividerItemDecoration = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL).apply {
+                setDrawable(binding.getDrawable(R.drawable.divider_note_list)!!)
+            }
+            addItemDecoration(dividerItemDecoration)
+        }
+
+        binding.rvCategories.adapter = categoryListController.adapter
 
         binding.btnExtend.setOnClickListener {
-            section.update(section.getTypedGroups().map(NoteListItem::toItemWithExpandedBody))
-            refreshNoteList()
-            binding.btnExtend.setTypeface(null, Typeface.BOLD)
-            binding.btnCompact.setTypeface(null, Typeface.NORMAL)
+            noteListController.expandNotes()
+
+            binding.btnExtend.setTextBold()
+            binding.btnCompact.setTextNormal()
         }
 
         binding.btnCompact.setOnClickListener {
-            section.update(section.getTypedGroups().map(NoteListItem::toItemWithShortBody))
-            refreshNoteList()
-            binding.btnCompact.setTypeface(null, Typeface.BOLD)
-            binding.btnExtend.setTypeface(null, Typeface.NORMAL)
+            noteListController.compactNotes()
+
+            binding.btnCompact.setTextBold()
+            binding.btnExtend.setTextNormal()
+        }
+    }
+
+    private fun renderState(state: NoteListViewModel.ScreenState) {
+        binding.progressBar.isVisible = state is NoteListViewModel.ScreenState.Loading
+        binding.root.isClickable = state !is NoteListViewModel.ScreenState.Loading
+        binding.root.isEnabled = state !is NoteListViewModel.ScreenState.Loading
+
+        when (state) {
+            is NoteListViewModel.ScreenState.NotesAndCategories -> {
+                noteListController.setData(state.notes)
+                categoryListController.setData(state.categories)
+                binding.rvCategories.isVisible = true
+                binding.containerExtendCompatButtons.isVisible = true
+                binding.rvNotes.isVisible = true
+            }
+            is NoteListViewModel.ScreenState.OnlyCategories -> {
+                noteListController.setData(emptyList())
+                categoryListController.setData(state.categories)
+                binding.rvNotes.isVisible = false
+            }
+            is NoteListViewModel.ScreenState.OnlyNotes -> {
+                noteListController.setData(state.notes)
+                categoryListController.setData(emptyList())
+                binding.rvCategories.isVisible = false
+                binding.containerExtendCompatButtons.isVisible = true
+            }
+            NoteListViewModel.ScreenState.Empty -> {
+                noteListController.setData(emptyList())
+                categoryListController.setData(emptyList())
+                binding.containerExtendCompatButtons.isVisible = false
+                binding.rvCategories.isVisible = false
+                binding.rvNotes.isVisible = false
+            }
+            else -> Unit
         }
     }
 
@@ -85,18 +115,5 @@ class NoteListFragment constructor(private val viewModelProvider: Provider<NoteL
     override fun onResume() {
         super.onResume()
         viewModel.fetchAllNotes()
-    }
-
-    private fun renderState(state: NoteListViewModel.ScreenState) {
-        Timber.e(state.toString())
-        when (state) {
-            is NoteListViewModel.ScreenState.Content -> {
-                section.update(state.data.map { NoteListItem(it, viewModel::deleteNote) })
-                refreshNoteList()
-            }
-        }
-    }
-
-    private fun refreshNoteList() {
     }
 }

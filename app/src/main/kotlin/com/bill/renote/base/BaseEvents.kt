@@ -13,6 +13,7 @@ data class ShowSnackbarEvent(
     val message: CharSequence? = null,
     @StringRes val stringId: Int? = null,
     val snackbarButton: SnackbarButton? = null,
+    val onSnackbarDismissed: () -> Unit = {},
     val duration: Int = Snackbar.LENGTH_SHORT
 ) : Event
 

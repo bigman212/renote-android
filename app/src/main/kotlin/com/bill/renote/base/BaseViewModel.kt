@@ -10,12 +10,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
 
-open class BaseViewModel : ViewModel(), CoroutineScope {
+abstract class BaseViewModel : ViewModel(), AppViewModel, CoroutineScope {
 
     override val coroutineContext: CoroutineContext =
         SupervisorJob() + Dispatchers.Main.immediate + CoroutineExceptionHandler(::handleCoroutineException)
 
-    val events: EventsQueue by lazy { EventsQueue() }
+    override val events: EventsQueue by lazy { EventsQueue() }
 
     private fun handleCoroutineException(coroutineContext: CoroutineContext, throwable: Throwable) {
         if (throwable is CancellationException) {

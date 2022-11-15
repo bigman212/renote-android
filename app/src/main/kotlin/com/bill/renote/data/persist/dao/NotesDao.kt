@@ -8,9 +8,6 @@ import androidx.room.Query
 import com.bill.renote.data.persist.entities.NoteEntity
 import com.bill.renote.data.persist.entities.NoteEntity.Companion.COLUMN_ID
 import com.bill.renote.data.persist.entities.NoteEntity.Companion.TABLE_NAME
-import io.reactivex.Completable
-import io.reactivex.Maybe
-import io.reactivex.Single
 
 @Dao
 interface NotesDao {
@@ -24,7 +21,7 @@ interface NotesDao {
     suspend fun saveAll(notes: List<NoteEntity>)
 
     @Query("SELECT * FROM $TABLE_NAME WHERE $COLUMN_ID LIKE :noteId LIMIT 1")
-    suspend fun loadById(noteId: Long): NoteEntity
+    suspend fun loadById(noteId: String): NoteEntity
 
     @Delete
     suspend fun delete(noteEntity: NoteEntity)

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">renote-android</string>
     <string name="et_note_title"><font size="20">Title</font></string>
+    <string name="note_list_delete_revert">Revert</string>
 </resources>

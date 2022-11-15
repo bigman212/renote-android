@@ -13,15 +13,15 @@ import androidx.room.Index
     ]
 )
 data class NoteCategoryCrossRef(
-    @ColumnInfo(name = COLUMN_REF_NOTE_ID)
+    @ColumnInfo(name = NoteEntity.COLUMN_ID)
     val noteId: String,
-    @ColumnInfo(name = COLUMN_REF_CATEGORY_ID)
+    @ColumnInfo(name = CategoryEntity.COLUMN_ID)
     val categoryId: String
 ) {
     companion object {
         const val TABLE_NAME = "note_category_cross_ref"
 
-        const val COLUMN_REF_NOTE_ID = "ref_note_id"
-        const val COLUMN_REF_CATEGORY_ID = "ref_category_id"
+        const val COLUMN_REF_NOTE_ID = NoteEntity.COLUMN_ID
+        const val COLUMN_REF_CATEGORY_ID = CategoryEntity.COLUMN_ID
     }
 }

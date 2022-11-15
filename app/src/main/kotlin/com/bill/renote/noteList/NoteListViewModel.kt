@@ -1,62 +1,104 @@
 package com.bill.renote.noteList
 
 import androidx.lifecycle.MutableLiveData
+import com.bill.renote.R
 import com.bill.renote.base.BaseViewModel
 import com.bill.renote.base.Event
 import com.bill.renote.base.ShowSnackbarEvent
+import com.bill.renote.base.SnackbarButton
 import com.bill.renote.common.extensions.delegate
-import ru.bill.renote.common.extensions.scheduleIoToUi
-import com.bill.renote.data.persist.SchedulersProvider
+import com.bill.renote.data.persist.junctions.CategoryWithNotes
+import com.bill.renote.data.persist.junctions.NoteWithCategories
+import com.bill.renote.data.repository.CategoriesRepository
+import com.bill.renote.data.repository.NoteRepository
+import com.bill.renote.noteList.adapter.NoteListItemModelData
 import timber.log.Timber
-import javax.inject.Inject
+import kotlinx.coroutines.launch
 
-class NoteListViewModel @Inject constructor(
-    private val noteListUseCase: NoteListUseCase,
-    private val schedulersProvider: SchedulersProvider
+class NoteListViewModel(
+    private val noteRepository: NoteRepository,
+    private val categoriesRepository: CategoriesRepository
 ) : BaseViewModel() {
 
-    sealed class ScreenState {
-        data class Content(val data: List<NoteWithCategories>) : ScreenState()
-        object Loading : ScreenState()
+    sealed interface ScreenState {
+        data class NotesAndCategories(
+            val notes: List<NoteListItemModelData>,
+            val categories: List<CategoryWithNotes>
+        ) : ScreenState
 
-        object Empty : ScreenState()
+        data class OnlyNotes(val notes: List<NoteListItemModelData>): ScreenState
+        data class OnlyCategories(val categories: List<CategoryWithNotes>) : ScreenState
+
+        object Loading : ScreenState
+        object Empty : ScreenState
 
         companion object {
-            fun initial(): ScreenState = Content(listOf())
+            fun initial(): ScreenState = Loading
         }
     }
 
-    data class NoteIsDeletedEvent(val deleteNoteItem: NoteWithCategories) : Event
+    object NoteIsDeletedEvent : Event
 
     val viewState: MutableLiveData<ScreenState> = MutableLiveData(ScreenState.initial())
     private var state: ScreenState by viewState.delegate()
 
     fun fetchAllNotes() {
-        noteListUseCase.getAllNotes()
-            .doOnSubscribe { state = ScreenState.Loading }
-            .scheduleIoToUi(schedulersProvider)
-            .subscribe(
-                { notes -> state = if (notes.isEmpty()) ScreenState.Empty else ScreenState.Content(notes) },
-                { error ->
-                    Timber.e(error)
-                    sendErrorEvent(error)
-                }
-            ).disposeOnCleared()
+        viewState.postValue(ScreenState.Loading)
+        state = ScreenState.Loading
+        launch {
+            state = fetchNotesAndGetState()
+        }
     }
 
-    fun deleteNote(noteWithCategories: NoteWithCategories) {
-        noteListUseCase.deleteNote(noteWithCategories.note)
-            .doOnSubscribe { state = ScreenState.Loading }
-            .scheduleIoToUi(schedulersProvider)
-            .subscribe(
-                {
-                    events.push(NoteIsDeletedEvent(noteWithCategories))
-                    events.push(ShowSnackbarEvent("Note deleted successfully"))
-                },
-                { error ->
-                    Timber.e(error)
-                    sendErrorEvent(error)
-                }
-            ).disposeOnCleared()
+    private suspend fun fetchNotesAndGetState(): ScreenState {
+        return try {
+            val notes = noteRepository.getAllNotesWithCategories().map(::NoteListItemModelData)
+            val categories = categoriesRepository.getAllCategoriesWithNotes()
+            // for better readability
+            @Suppress("KotlinConstantConditions")
+            when {
+                categories.isNotEmpty() && notes.isNotEmpty() -> ScreenState.NotesAndCategories(notes, categories)
+                categories.isNotEmpty() && notes.isEmpty() -> ScreenState.OnlyCategories(categories)
+                categories.isEmpty() && notes.isNotEmpty() -> ScreenState.OnlyNotes(notes)
+                else -> ScreenState.Empty
+            }
+        } catch (e: Throwable) {
+            Timber.e(e)
+            ScreenState.Empty
+        }
+    }
+
+    fun startDeleteNote(noteWithCategories: NoteWithCategories) {
+        launch {
+            try {
+                noteRepository.startDeleteNoteById(noteWithCategories.note.id)
+                events.push(NoteIsDeletedEvent)
+                events.push(
+                    ShowSnackbarEvent(
+                        message = "Note deleted successfully",
+                        snackbarButton = SnackbarButton(
+                            R.string.note_list_delete_revert,
+                            onActionClicked = { revertDeleteNote() }
+                        ),
+                        onSnackbarDismissed = {
+                            noteRepository.finishDeleteNoteById()
+                        }
+                    )
+                )
+            } catch (e: Throwable) {
+                events.push(ShowSnackbarEvent(message = "Can't delete note for unknown reasons"))
+                Timber.e(e)
+            }
+        }
+    }
+
+    private fun revertDeleteNote() {
+        launch {
+            try {
+                noteRepository.revertDeleteNote()
+            } catch (e: Throwable) {
+                Timber.e(e)
+            }
+        }
     }
 }

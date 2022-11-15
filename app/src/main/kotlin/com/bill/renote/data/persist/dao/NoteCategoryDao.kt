@@ -20,6 +20,10 @@ interface NoteCategoryDao {
     suspend fun loadAllNotesWithCategories(): List<NoteWithCategories>
 
     @Transaction
+    @Query("SELECT * from ${NoteEntity.TABLE_NAME} WHERE ${NoteEntity.COLUMN_ID} = :noteId ")
+    suspend fun loadNoteWithCategoriesById(noteId: String): NoteWithCategories?
+
+    @Transaction
     @Query("SELECT * from ${CategoryEntity.TABLE_NAME}")
     suspend fun loadAllCategoriesWithNotes(): List<CategoryWithNotes>
 

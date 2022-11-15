@@ -1,5 +1,8 @@
 package com.bill.renote.common.extensions
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+
 fun <R> unsafeLazy(initializer: () -> R): Lazy<R> = lazy(LazyThreadSafetyMode.NONE, initializer)
 
 inline fun <reified R> List<*>.findInstance(): R? {
@@ -33,6 +36,22 @@ inline fun <reified T : Enum<T>, V> ((T) -> V).find(value: V): T? {
 
 fun Result<*>.invokeAndForget() {
     getOrNull()
+}
+
+fun CoroutineScope.launchCatching(
+    tryBlock: suspend (CoroutineScope) -> Unit,
+    catchBlock: (Throwable) -> Unit,
+    finallyBlock: () -> Unit = {}
+) {
+    launch {
+        try {
+            tryBlock(this)
+        } catch (e: Throwable) {
+            catchBlock(e)
+        } finally {
+            finallyBlock()
+        }
+    }
 }
 
 

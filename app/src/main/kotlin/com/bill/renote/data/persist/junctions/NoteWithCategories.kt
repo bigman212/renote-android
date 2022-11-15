@@ -9,7 +9,7 @@ import com.bill.renote.data.persist.entities.NoteEntity
 
 class NoteWithCategories(
     @Embedded
-    val note: NoteEntity,
+    var note: NoteEntity,
     @Relation(
         parentColumn = NoteEntity.COLUMN_ID,
         entityColumn = CategoryEntity.COLUMN_ID,

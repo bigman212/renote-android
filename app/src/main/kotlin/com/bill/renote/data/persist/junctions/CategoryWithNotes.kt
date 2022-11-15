@@ -9,10 +9,10 @@ import com.bill.renote.data.persist.entities.NoteEntity
 
 class CategoryWithNotes(
     @Embedded
-    val category: CategoryEntity,
+    var category: CategoryEntity,
     @Relation(
         parentColumn = CategoryEntity.COLUMN_ID,
-        entityColumn = NoteEntity.COLUMN_ID,
+        entityColumn = NoteCategoryCrossRef.COLUMN_REF_NOTE_ID,
         associateBy = Junction(NoteCategoryCrossRef::class)
     )
     val notesInCategory: List<NoteEntity>

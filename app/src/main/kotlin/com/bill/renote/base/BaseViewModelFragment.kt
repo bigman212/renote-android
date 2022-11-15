@@ -1,17 +1,23 @@
 package com.bill.renote.base
 
 import androidx.annotation.CallSuper
-import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import android.os.Bundle
 import android.view.View
 import com.google.android.material.snackbar.Snackbar
 
-open class BaseFragment : Fragment {
-    constructor() : super()
-    constructor(@LayoutRes layoutId: Int) : super(layoutId)
+abstract class BaseViewModelFragment<VM: AppViewModel> : Fragment() {
 
     open val snackbarAttachView: View
         get() = requireActivity().findViewById(android.R.id.content)
+
+    abstract val viewModel: VM
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        observeEvents(viewModel.events, ::onEvent)
+    }
 
     @CallSuper
     protected open fun onEvent(event: Event) {

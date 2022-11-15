@@ -26,7 +26,7 @@ data class NoteEntity(
     companion object {
         const val TABLE_NAME = "notes"
 
-        const val COLUMN_ID = "id"
+        const val COLUMN_ID = "note_id"
         const val COLUMN_TITLE = "title"
         const val COLUMN_BODY = "body"
         const val COLUMN_SOURCE_LINK = "source_link"
