@@ -33,25 +33,22 @@ android {
         }
     }
 
-    signingConfigs {
-        release {
-            // TODO
-        }
-    }
 
     buildTypes {
         debug {
+            applicationIdSuffix '.debug'
             minifyEnabled false
         }
 
         alpha {
-            applicationIdSuffix '.alpha'
+            applicationIdSuffix '.debug'
             debuggable true
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-        prod {
+        release {
+            signingConfig signingConfigs.debug
             debuggable false
             shrinkResources true
             minifyEnabled true
@@ -61,7 +58,7 @@ android {
 
     applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "renote-${variant.versionName}(${variant.versionCode}).apk"
+            outputFileName = "renote-${variant.buildType.name}-${variant.versionName}(${variant.versionCode}).apk"
         }
     }
 

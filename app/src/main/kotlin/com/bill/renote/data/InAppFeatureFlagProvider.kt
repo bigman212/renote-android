@@ -2,7 +2,7 @@ package com.bill.renote.data
 
 import com.bill.renote.BuildConfig
 
-class InAppFeatureFlagProvider {
+class InAppFeatureFlagProvider{
     private val inAppFeatureFlags = InAppFeatureFlags(
         isDebugBuild = BuildConfig.DEBUG
     )

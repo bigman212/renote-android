@@ -53,4 +53,6 @@ class NoteRepository(
     fun finishDeleteNoteById() {
         noteToDelete = null
     }
+
+    suspend fun isEmpty(): Boolean = notesDao.loadAll().isEmpty()
 }

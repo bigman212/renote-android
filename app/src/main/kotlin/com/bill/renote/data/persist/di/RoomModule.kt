@@ -29,7 +29,7 @@ object RoomModule {
         single<NotesDao> { get<AppDatabase>().notesDao }
         single<CategoriesDao> { get<AppDatabase>().categoriesDao }
         single<NoteCategoryDao> { get<AppDatabase>().noteCategoryDao }
-        
+
         singleOf(::NoteRepository)
         singleOf(::CategoriesRepository)
     }

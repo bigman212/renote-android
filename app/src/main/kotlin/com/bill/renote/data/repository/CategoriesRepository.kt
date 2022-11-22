@@ -11,6 +11,8 @@ class CategoriesRepository(
     private val categoriesDao: CategoriesDao,
     private val noteCategoryDao: NoteCategoryDao
 ) {
+    suspend fun getAllCategories(): List<CategoryEntity> = categoriesDao.loadAll()
+
     suspend fun getAllCategoriesWithNotes(): List<CategoryWithNotes> = noteCategoryDao.loadAllCategoriesWithNotes()
 
     suspend fun createCategory(categoryName: String): CategoryEntity {
@@ -25,4 +27,6 @@ class CategoriesRepository(
     suspend fun linkNoteToCategory(noteId: String, categoryId: String) {
         noteCategoryDao.insert(NoteCategoryCrossRef(noteId = noteId, categoryId = categoryId))
     }
+
+    suspend fun isEmpty(): Boolean = categoriesDao.loadAll().isEmpty()
 }

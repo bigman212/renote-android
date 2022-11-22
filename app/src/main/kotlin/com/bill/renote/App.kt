@@ -2,6 +2,7 @@ package com.bill.renote
 
 import android.app.Application
 import com.bill.renote.data.InAppFeatureFlags
+import com.bill.renote.data.prefs.CommonPrefs
 import com.bill.renote.data.repository.CategoriesRepository
 import com.bill.renote.data.repository.NoteRepository
 import com.bill.renote.di.AppModule
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 class App : Application() {
 
     private val inAppFeatureFlags: InAppFeatureFlags by inject()
+    private val commonPrefs: CommonPrefs by inject()
     private val noteRepository: NoteRepository by inject()
     private val categoriesRepository: CategoriesRepository by inject()
     private val appScope: AppScope by inject()
@@ -34,8 +36,13 @@ class App : Application() {
         }
 
         appScope.launch {
-            if (categoriesRepository.getAllCategoriesWithNotes().isEmpty() && noteRepository.getAllNotes().isEmpty()) {
+            val isFirstLaunch =
+                categoriesRepository.isEmpty() &&
+                    noteRepository.isEmpty() &&
+                    commonPrefs.isFirstLaunch
+            if (isFirstLaunch) {
                 prefillApp()
+                commonPrefs.isFirstLaunch = false
             }
         }
     }
